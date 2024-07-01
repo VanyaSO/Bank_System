@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ivanushachov/Desktop/Bank_System/Bank_System/Bank_System.csproj": {}
+    "/Users/leksiy/RiderProjects/Bank_System/Bank_System/Bank_System.csproj": {}
   },
   "projects": {
-    "/Users/ivanushachov/Desktop/Bank_System/Bank_System/Bank_System.csproj": {
+    "/Users/leksiy/RiderProjects/Bank_System/Bank_System/Bank_System.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ivanushachov/Desktop/Bank_System/Bank_System/Bank_System.csproj",
+        "projectUniqueName": "/Users/leksiy/RiderProjects/Bank_System/Bank_System/Bank_System.csproj",
         "projectName": "Bank_System",
-        "projectPath": "/Users/ivanushachov/Desktop/Bank_System/Bank_System/Bank_System.csproj",
-        "packagesPath": "/Users/ivanushachov/.nuget/packages/",
-        "outputPath": "/Users/ivanushachov/Desktop/Bank_System/Bank_System/obj/",
+        "projectPath": "/Users/leksiy/RiderProjects/Bank_System/Bank_System/Bank_System.csproj",
+        "packagesPath": "/Users/leksiy/.nuget/packages/",
+        "outputPath": "/Users/leksiy/RiderProjects/Bank_System/Bank_System/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/ivanushachov/.nuget/NuGet/NuGet.Config"
+          "/Users/leksiy/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/leksiy/.dotnet/sdk/8.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
