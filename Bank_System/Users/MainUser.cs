@@ -8,12 +8,14 @@ namespace Bank_System
 {
     internal abstract class MainUser
     {
-        public string Login { get; set; }
+        public string Name { get; set; } //не меняется 
+        public string Login { get; set; } //не меняется
         public string Password { get; set; }
 
         public MainUser() { }
-        public MainUser(string login, string password)
+        public MainUser(string name,string login, string password)
         {
+            Name = name;
             Login = login;
             Password = password;
         }
@@ -22,7 +24,7 @@ namespace Bank_System
 
         public override string ToString()
         {
-            return $"Логин: {Login}\nПароль: {Password}";
+            return $"Имя: {Name}\nЛогин: {Login}\nПароль: {Password}";
         }
     }
 }

@@ -18,10 +18,12 @@ namespace Bank_System
             {
 
                 Console.Write("Введите Ваше имя: ");
-                if (string.IsNullOrEmpty(user.FullName = Console.ReadLine())) //проверка на пустую строку
+                
+                if (string.IsNullOrEmpty(user.Name = Console.ReadLine())) //проверка на пустую строку
                 {
                     throw new Exception("Имя не может быть пустым");
                 }
+               
 
                 Console.Write("Введите Ваш логин: ");
                 if (string.IsNullOrEmpty(user.Login = Console.ReadLine()))
@@ -37,7 +39,7 @@ namespace Bank_System
                 }
 
                 Console.Write("Введите дату Вашего рождения: ");
-                string date;
+                string? date;
                 if(string.IsNullOrEmpty(date = Console.ReadLine()))
                 {
                     throw new Exception("Дата рождения не может бюьб пустой");
@@ -54,11 +56,6 @@ namespace Bank_System
                     user.BDate = new DateTime(year, month, day);
                 }
 
-
-
-                //Date newDate = new Date();
-                //newDate.CreateDate();
-                //user.UserBdayDate = newDate;
 
                 Console.Write("Введите PassID [или нажмите [Enter] для автоматического создания ID]: ");
                 if (string.IsNullOrEmpty(user.ID = Console.ReadLine()))
@@ -78,9 +75,6 @@ namespace Bank_System
             {
                 Console.WriteLine(ex.ToString());
             }
-
-
-
 
         }
 
