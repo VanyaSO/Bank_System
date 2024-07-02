@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Bank_System
+{
+    internal class BankUser:MainUser
+    {
+        public string FullName {  get; set; } // не меняется
+        public Date UserBdayDate { get; set; } //не меняется 
+        public string PhoneNumber {  get; set; } // меняетя 
+        public string ID { get; set; } // не меняется 
+
+        //List<> list { get; set; }
+
+        public BankUser():base(){ }
+        public BankUser(string name,string login,string pass,string phoneNumb,string id,Date date) : base(login, pass)
+        {
+            FullName = name;
+            UserBdayDate = date;
+            PhoneNumber = phoneNumb;
+            ID = id;
+
+        }
+
+
+       
+
+        public override string ToString()
+        {
+            return $"ID:{ID}\nUser full name: {FullName}\n{base.ToString()}\nUser birthday: {UserBdayDate}\nPhone number: {PhoneNumber}";
+        }
+
+
+
+    }
+}
