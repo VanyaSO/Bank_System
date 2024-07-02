@@ -1,4 +1,5 @@
 /Bank_System.sln
 .idea
 .vs
-Bank_System/obj
+/Bank_System/obj
+
