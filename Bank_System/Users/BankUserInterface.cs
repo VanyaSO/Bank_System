@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Bank_System
 {
-    internal  static class BankUserInterface
+    internal static class BankUserInterface
     {
 
         public static void Registration(this BankUser user)
@@ -18,52 +18,70 @@ namespace Bank_System
             {
 
                 Console.Write("Enter your name: ");
-                if(string.IsNullOrEmpty(user.FullName = Console.ReadLine())) //проверка на пустую строку
+                if (string.IsNullOrEmpty(user.FullName = Console.ReadLine())) //проверка на пустую строку
                 {
                     throw new Exception("Name cant be empty");
                 }
 
                 Console.Write("Enter new login: ");
-                if(string.IsNullOrEmpty(user.Login = Console.ReadLine()))
+                if (string.IsNullOrEmpty(user.Login = Console.ReadLine()))
                 {
                     throw new Exception("Login cant be empty");
                 }
 
                 Console.Write("Enter new password: ");
-                
-                if (string.IsNullOrEmpty(user.Password =Console.ReadLine()))
+
+                if (string.IsNullOrEmpty(user.Password = Console.ReadLine()))
                 {
                     throw new Exception("Password cant be empty");
                 }
 
                 Console.Write("Enter you bd date: ");
-            
-                Date newDate = new Date();
-                newDate.CreateDate();
-                user.UserBdayDate = newDate;
+                string date;
+                if(string.IsNullOrEmpty(date = Console.ReadLine()))
+                {
+                    throw new Exception("Date cant be empty");
+                }
+                else
+                {
+
+                    string[] parts = date.Split(' ');
+                    int day = Convert.ToInt16(parts[0]);
+                    int month = Convert.ToInt16(parts[1]);
+                    int year = Convert.ToInt16(parts[2]);
+
+
+                    user.BDate = new DateTime(year, month, day);
+                }
+
+
+
+                //Date newDate = new Date();
+                //newDate.CreateDate();
+                //user.UserBdayDate = newDate;
 
                 Console.Write("Enter your personal ID [or press [Enter] for create it automatically]: ");
-                if(string.IsNullOrEmpty(user.ID = Console.ReadLine()))
+                if (string.IsNullOrEmpty(user.ID = Console.ReadLine()))
                 {
-                    user.ID = createNewId();    
+                    user.ID = createNewId();
                 }
-                
+
 
                 Console.Write("Enter your phone: ");
                 if (string.IsNullOrEmpty(user.PhoneNumber = Console.ReadLine()))
                 {
                     throw new Exception("Phone cant be empty");
 
-                } 
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
 
 
 
-            
+
         }
 
         private static string createNewId()
@@ -81,7 +99,7 @@ namespace Bank_System
             try
             {
 
-                if(string.IsNullOrEmpty(choice = Console.ReadLine()))
+                if (string.IsNullOrEmpty(choice = Console.ReadLine()))
                 {
                     throw new Exception("Answer cant be empty");
                 }
@@ -91,36 +109,36 @@ namespace Bank_System
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
 
         }
 
-        private static void Change(string answ,BankUser user)
+        private static void Change(string answ, BankUser user)
         {
             try
             {
-                switch(answ)
+                switch (answ)
                 {
                     case "1":
                         {
                             ChangePhoneNumber(user);
                             break;
                         }
-                        case "2":
+                    case "2":
                         {
-                            ChangePassword(user); 
+                            ChangePassword(user);
                             break;
                         }
-                        default:
+                    default:
                         {
                             throw new Exception("Invalid choice");
                         }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
@@ -137,7 +155,8 @@ namespace Bank_System
 
                 Console.Write(@"Are you shure? [y]\[n]: ");
                 string answ;
-                if(!string.IsNullOrEmpty(answ = Console.ReadLine())){
+                if (!string.IsNullOrEmpty(answ = Console.ReadLine()))
+                {
 
                     switch (answ)
                     {
@@ -155,29 +174,29 @@ namespace Bank_System
                         default:
                             throw new Exception("Invalid answer");
 
-                            
+
                     }
                 }
                 else
                 {
                     throw new Exception("");
                 }
-               
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-            
+
         }
-        
+
         private static void ConfirmPhoneNumber(BankUser user)// метод для подтв.номера
         {
             Console.Write("Enter full current number: ");
             string userNumber;
             try
             {
-                if(string.IsNullOrEmpty(userNumber = Console.ReadLine()))
+                if (string.IsNullOrEmpty(userNumber = Console.ReadLine()))
                 {
                     throw new Exception("You enter empty number");
                 }
@@ -197,7 +216,7 @@ namespace Bank_System
             {
                 Console.WriteLine(ex.ToString());
             }
-           
+
         }
 
         private static void CreateNewPhoneNumber(BankUser user)//для  изменения номера если пользователь ввел правильный номер
@@ -205,19 +224,19 @@ namespace Bank_System
             Console.Write("Enter new phone number: ");
             try
             {
-                
-                if(string.IsNullOrEmpty(user.PhoneNumber = Console.ReadLine()))
+
+                if (string.IsNullOrEmpty(user.PhoneNumber = Console.ReadLine()))
                 {
-                    throw new Exception("You enter empty number"); 
+                    throw new Exception("You enter empty number");
                 }
-                
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
         }
-        private static bool CompareNumbers(string number,BankUser user)//сравнивает номера для проверки в ConfirmPhoneNumber
+        private static bool CompareNumbers(string number, BankUser user)//сравнивает номера для проверки в ConfirmPhoneNumber
         {
             return number == user.PhoneNumber;
         }
@@ -225,14 +244,14 @@ namespace Bank_System
         private static void ShowHiddenNumber(this string number) //показывает номер в виде: +380*******000 для подтверждения 
         {
 
-            for(int i = 0;i<number.Length;i++)
+            for (int i = 0; i < number.Length; i++)
             {
                 if (i >= 4 && i <= number.Length - 4)
                 {
                     Console.Write("*");
                 }
-                else 
-                { 
+                else
+                {
                     Console.Write(number[i]);
                 }
             }
@@ -251,7 +270,8 @@ namespace Bank_System
             string? answ;
             try
             {
-                if(string.IsNullOrEmpty(answ = Console.ReadLine())){
+                if (string.IsNullOrEmpty(answ = Console.ReadLine()))
+                {
 
                     throw new Exception("Empty answer");
                 }
@@ -277,7 +297,7 @@ namespace Bank_System
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
@@ -289,13 +309,13 @@ namespace Bank_System
             try
             {
                 string? pass;
-                if(string.IsNullOrEmpty(pass = Console.ReadLine()))
+                if (string.IsNullOrEmpty(pass = Console.ReadLine()))
                 {
                     throw new Exception("Pass cant be empty");
                 }
                 else
                 {
-                    if(ComparePass(pass, user))
+                    if (ComparePass(pass, user))
                     {
                         CreateNewPassword(user);
                     }
@@ -312,7 +332,7 @@ namespace Bank_System
 
         }
 
-        private static bool ComparePass(string pass,BankUser user)
+        private static bool ComparePass(string pass, BankUser user)
         {
             return pass == user.Password;
         }
@@ -320,7 +340,7 @@ namespace Bank_System
         private static void CreateNewPassword(BankUser user)
         {
             Console.Write("Enter new password: ");
-            if(string.IsNullOrEmpty(user.Password = Console.ReadLine()))
+            if (string.IsNullOrEmpty(user.Password = Console.ReadLine()))
             {
                 throw new Exception("Pass cant be empty");
             }

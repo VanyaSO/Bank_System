@@ -18,7 +18,7 @@ namespace Bank_System
             Password = password;
         }
 
-        
+
 
         public override string ToString()
         {
