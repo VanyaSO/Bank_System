@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ivanushachov/Desktop/Bank_System/Bank_System/Bank_System.csproj": {}
+    "C:\\Users\\User\\Desktop\\Bank_System\\Bank_System\\Bank_System.csproj": {}
   },
   "projects": {
-    "/Users/ivanushachov/Desktop/Bank_System/Bank_System/Bank_System.csproj": {
+    "C:\\Users\\User\\Desktop\\Bank_System\\Bank_System\\Bank_System.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ivanushachov/Desktop/Bank_System/Bank_System/Bank_System.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\Bank_System\\Bank_System\\Bank_System.csproj",
         "projectName": "Bank_System",
-        "projectPath": "/Users/ivanushachov/Desktop/Bank_System/Bank_System/Bank_System.csproj",
-        "packagesPath": "/Users/ivanushachov/.nuget/packages/",
-        "outputPath": "/Users/ivanushachov/Desktop/Bank_System/Bank_System/obj/",
+        "projectPath": "C:\\Users\\User\\Desktop\\Bank_System\\Bank_System\\Bank_System.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\Bank_System\\Bank_System\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/ivanushachov/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -53,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
