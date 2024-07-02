@@ -22,7 +22,7 @@ namespace Bank_System
 
         public override string ToString()
         {
-            return $"Login: {Login}\nPassword: {Password}";
+            return $"Логин: {Login}\nПароль: {Password}";
         }
     }
 }

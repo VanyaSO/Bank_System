@@ -29,7 +29,7 @@ namespace Bank_System
 
         public override string ToString()
         {
-            return $"ID:{ID}\nUser full name: {FullName}\n{base.ToString()}\nUser birthday: {BDate.Date.ToShortDateString()}\nPhone number: {PhoneNumber}";
+            return $"ID:{ID}\nФИО: {FullName}\n{base.ToString()}\nДата рождения: {BDate.Date.ToShortDateString()}\nНомер телефона: {PhoneNumber}";
         }
 
 

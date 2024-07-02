@@ -17,30 +17,30 @@ namespace Bank_System
             try
             {
 
-                Console.Write("Enter your name: ");
+                Console.Write("Введите Ваше имя: ");
                 if (string.IsNullOrEmpty(user.FullName = Console.ReadLine())) //проверка на пустую строку
                 {
-                    throw new Exception("Name cant be empty");
+                    throw new Exception("Имя не может быть пустым");
                 }
 
-                Console.Write("Enter new login: ");
+                Console.Write("Введите Ваш логин: ");
                 if (string.IsNullOrEmpty(user.Login = Console.ReadLine()))
                 {
-                    throw new Exception("Login cant be empty");
+                    throw new Exception("Логин не может быть пустым");
                 }
 
-                Console.Write("Enter new password: ");
+                Console.Write("Создайте новый пароль: ");
 
                 if (string.IsNullOrEmpty(user.Password = Console.ReadLine()))
                 {
-                    throw new Exception("Password cant be empty");
+                    throw new Exception("Пароль не может быть пустым");
                 }
 
-                Console.Write("Enter you bd date: ");
+                Console.Write("Введите дату Вашего рождения: ");
                 string date;
                 if(string.IsNullOrEmpty(date = Console.ReadLine()))
                 {
-                    throw new Exception("Date cant be empty");
+                    throw new Exception("Дата рождения не может бюьб пустой");
                 }
                 else
                 {
@@ -60,17 +60,17 @@ namespace Bank_System
                 //newDate.CreateDate();
                 //user.UserBdayDate = newDate;
 
-                Console.Write("Enter your personal ID [or press [Enter] for create it automatically]: ");
+                Console.Write("Введите PassID [или нажмите [Enter] для автоматического создания ID]: ");
                 if (string.IsNullOrEmpty(user.ID = Console.ReadLine()))
                 {
                     user.ID = createNewId();
                 }
 
 
-                Console.Write("Enter your phone: ");
+                Console.Write("Введите Ваш номер телефона: ");
                 if (string.IsNullOrEmpty(user.PhoneNumber = Console.ReadLine()))
                 {
-                    throw new Exception("Phone cant be empty");
+                    throw new Exception("Телефон не может быть пустым");
 
                 }
             }
@@ -94,14 +94,14 @@ namespace Bank_System
         public static void ChangeBankUser(this BankUser user)//общая для изменения доступных полей
         {
 
-            Console.WriteLine("1 - Change phone number\t2 - Change password");
+            Console.WriteLine("1 - Изменить номер телефона\t2 - Изменить пароль");
             string choice;
             try
             {
 
                 if (string.IsNullOrEmpty(choice = Console.ReadLine()))
                 {
-                    throw new Exception("Answer cant be empty");
+                    throw new Exception("Выбор не может быть пустым");
                 }
                 else
                 {
@@ -134,7 +134,7 @@ namespace Bank_System
                         }
                     default:
                         {
-                            throw new Exception("Invalid choice");
+                            throw new Exception("Некорректный выбор");
                         }
                 }
             }
@@ -148,38 +148,38 @@ namespace Bank_System
         ///==================================================================== [  CHANGE NUMBER ] ========================
         private static void ChangePhoneNumber(BankUser user)//изменени пароля
         {
-            Console.Write($"Current phone number:");
+            Console.Write($"Текущий номер телефона:");
             user.PhoneNumber.ShowHiddenNumber();//показывется скрыто для подтверждения пользователем
             try
             {
 
-                Console.Write(@"Are you shure? [y]\[n]: ");
+                Console.Write(@"Вы уверены? [д]\[н]: ");
                 string answ;
                 if (!string.IsNullOrEmpty(answ = Console.ReadLine()))
                 {
 
                     switch (answ)
                     {
-                        case "y":
+                        case "д":
                             {
                                 ConfirmPhoneNumber(user);
 
                                 break;
                             }
-                        case "n":
+                        case "н":
                             {
-                                Console.WriteLine("Return....");
+                                Console.WriteLine("Возвращем....");
                                 break;
                             }
                         default:
-                            throw new Exception("Invalid answer");
+                            throw new Exception("Некорректный выбор");
 
 
                     }
                 }
                 else
                 {
-                    throw new Exception("");
+                    throw new Exception("Ответ не может быть пустым");
                 }
 
             }
@@ -192,13 +192,13 @@ namespace Bank_System
 
         private static void ConfirmPhoneNumber(BankUser user)// метод для подтв.номера
         {
-            Console.Write("Enter full current number: ");
+            Console.Write("Введите текущий номер телефона: ");
             string userNumber;
             try
             {
                 if (string.IsNullOrEmpty(userNumber = Console.ReadLine()))
                 {
-                    throw new Exception("You enter empty number");
+                    throw new Exception("Поле не может быть пустым");
                 }
                 else
                 {
@@ -208,7 +208,7 @@ namespace Bank_System
                     }
                     else
                     {
-                        throw new Exception("You enter incorrect number");
+                        throw new Exception("Вы ввели некоректный номер");
                     }
                 }
             }
@@ -221,13 +221,13 @@ namespace Bank_System
 
         private static void CreateNewPhoneNumber(BankUser user)//для  изменения номера если пользователь ввел правильный номер
         {
-            Console.Write("Enter new phone number: ");
+            Console.Write("Введите новый номер телефона: ");
             try
             {
 
                 if (string.IsNullOrEmpty(user.PhoneNumber = Console.ReadLine()))
                 {
-                    throw new Exception("You enter empty number");
+                    throw new Exception("Поле не может быть пустым");
                 }
 
             }
@@ -266,32 +266,32 @@ namespace Bank_System
         //TODO:ПРОЕБАЖИТь
         private static void ChangePassword(BankUser user)
         {
-            Console.WriteLine(@"Are you sure to want change password? : [y]\[n] ");
+            Console.WriteLine(@"Вы действительно желаете сменить пароль? : [д]\[н] ");
             string? answ;
             try
             {
                 if (string.IsNullOrEmpty(answ = Console.ReadLine()))
                 {
 
-                    throw new Exception("Empty answer");
+                    throw new Exception("Некорректный ответ");
                 }
                 else
                 {
                     switch (answ)
                     {
-                        case "y":
+                        case "д":
                             {
                                 ConfirmPassword(user);
                                 break;
                             }
-                        case "n":
+                        case "н":
                             {
-                                Console.WriteLine("Return...");
+                                Console.WriteLine("Возвращаем...");
                                 break;
                             }
                         default:
                             {
-                                throw new Exception("Invalid answer");
+                                throw new Exception("Некорректный ответ");
                             }
 
                     }
@@ -305,13 +305,13 @@ namespace Bank_System
 
         private static void ConfirmPassword(BankUser user)
         {
-            Console.Write("Enter your password: ");
+            Console.Write("Введите текущий пароль: ");
             try
             {
                 string? pass;
                 if (string.IsNullOrEmpty(pass = Console.ReadLine()))
                 {
-                    throw new Exception("Pass cant be empty");
+                    throw new Exception("Пароль не может быть пустым");
                 }
                 else
                 {
@@ -321,7 +321,7 @@ namespace Bank_System
                     }
                     else
                     {
-                        throw new Exception("Invalid password");
+                        throw new Exception("Некорректный пароль");
                     }
                 }
             }
@@ -339,10 +339,10 @@ namespace Bank_System
 
         private static void CreateNewPassword(BankUser user)
         {
-            Console.Write("Enter new password: ");
+            Console.Write("Введите новый пароль: ");
             if (string.IsNullOrEmpty(user.Password = Console.ReadLine()))
             {
-                throw new Exception("Pass cant be empty");
+                throw new Exception("Пароль не может быть пустым");
             }
         }
     }
