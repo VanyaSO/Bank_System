@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/leksiy/RiderProjects/Bank_System/Bank_System/Bank_System.csproj",
+      "projectUniqueName": "/Users/leksiy/RiderProjects/Bank_System1/Bank_System/Bank_System.csproj",
       "projectName": "Bank_System",
-      "projectPath": "/Users/leksiy/RiderProjects/Bank_System/Bank_System/Bank_System.csproj",
+      "projectPath": "/Users/leksiy/RiderProjects/Bank_System1/Bank_System/Bank_System.csproj",
       "packagesPath": "/Users/leksiy/.nuget/packages/",
-      "outputPath": "/Users/leksiy/RiderProjects/Bank_System/Bank_System/obj/",
+      "outputPath": "/Users/leksiy/RiderProjects/Bank_System1/Bank_System/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/leksiy/.nuget/NuGet/NuGet.Config"
