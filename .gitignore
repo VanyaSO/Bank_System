@@ -1,5 +1,6 @@
 /Bank_System.sln
 .idea
 /Bank_System/bin
-/Bank_System/obj
-Bank_System/obj
+./Bank_System/obj
+Bank_System/bin/*
+Bank_System/obj/*
