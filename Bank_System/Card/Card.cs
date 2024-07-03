@@ -99,10 +99,10 @@ public class Card
     {
         Status = CardStatus.Active;
     }
-    
-    public void DisplayBalance() // TODO: может просто сделать геттер, что бы было удобнее
+
+    public override string ToString()
     {
-        Console.WriteLine($"Текущий баланс: {Balance:C}");
+        return $"Номер карты: {CardNumber} \nПин-код: {_pinCode} \nВалюта: {Currency} \nБаланс: {Balance} \nСтатус: {Status} \n";
     }
     
     public void Transfer(Card recipientCard, decimal amount, CurrencyType currency, string senderInitials, decimal? exchangeRate = null, string recipientName = null)
