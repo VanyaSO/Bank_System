@@ -1,0 +1,4 @@
+Bank_System/bin/*
+Bank_System/obj/*
+.vs/
+.idea
