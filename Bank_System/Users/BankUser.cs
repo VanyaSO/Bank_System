@@ -103,10 +103,12 @@ namespace Bank_System
 
                 Card newCard = new Card("0000", CurrencyType.UAH);
                 Console.WriteLine("По умолчанию PIN - 0000 Валюта: UAH");
+
+                Common.CurrentBank.Users.Add(this);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.Message);
             }
         }
 
@@ -116,9 +118,21 @@ namespace Bank_System
             return Convert.ToString(rand.Next(1000,9999));
         }
 
+        //Показать все карты
+
+        public void ShowAllCards()
+        {
+            foreach (var el in UserCards)
+            {
+                Console.WriteLine(el);
+            }
+        }
+
+
+
         //Подтверждение PIN
 
-        
+
 
         //ПОПОЛНЕНИЕ КАРТЫ
 
@@ -353,40 +367,35 @@ namespace Bank_System
         public void ChangeUser()//общая, для выбора
         {
             Console.WriteLine("1 - Изменить номер телефона\t2 - Изменить пароль");
-            string choice;
+            int choice = MainMenu.GetActionMenu(1,2);
             try
             {
 
-                if (string.IsNullOrEmpty(choice = Console.ReadLine()))
-                {
-                    throw new Exception("Выбор не может быть пустым");
-                }
-                else
-                {
-                    Change(choice);
-                }
+                Change(choice);
+                
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.Message);
             }
         }
 
         //ИЗМЕНЕНИЕ ПОЛЬЗОВАТЕЛЯ
 
-        private void Change(string answ)
+        private void Change(int answ)
         {
+
             try
             {
                 switch (answ)
                 {
-                    case "1":
+                    case 1:
                         {
                             ChangePhoneNumber();
                             break;
                         }
-                    case "2":
+                    case 2:
                         {
                             ChangePassword();
                             break;
@@ -409,54 +418,21 @@ namespace Bank_System
         {
             Console.Write($"Текущий номер телефона:");
             ShowHiddenNumber(PhoneNumber);//показывется скрыто для подтверждения пользователем
-            try
-            {
+            ConfirmPhoneNumber();
 
-                Console.Write(@"Вы уверены? [д]\[н]: ");
-                string answ;
-                if (!string.IsNullOrEmpty(answ = Console.ReadLine()))
-                {
-
-                    switch (answ)
-                    {
-                        case "д":
-                            {
-                                ConfirmPhoneNumber();
-
-                                break;
-                            }
-                        case "н":
-                            {
-                                Console.WriteLine("Возвращем....");
-                                break;
-                            }
-                        default:
-                            throw new Exception("Некорректный выбор");
-
-
-                    }
-                }
-                else
-                {
-                    throw new Exception("Ответ не может быть пустым");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+           
         }
         private void ConfirmPhoneNumber()
         {
-            Console.Write("Введите текущий номер телефона: ");
+            Console.Write("Введите текущий номер телефона полностью: ");
             string userNumber;
             try
             {
                 if (string.IsNullOrEmpty(userNumber = Console.ReadLine()))
                 {
-                    throw new Exception("Поле не может быть пустым");
+                    throw new Exception("Вы ввели пустую строку");
                 }
+
                 else
                 {
                     if (CompareNumbers(userNumber)) //сравнивает ввел ли пользователь с=корректный намб
@@ -471,7 +447,7 @@ namespace Bank_System
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.ToString());
             }
         }
 
@@ -485,6 +461,10 @@ namespace Bank_System
                 {
                     throw new Exception("Поле не может быть пустым");
                 }
+                else
+                {
+                    Message.SuccessMessage("Номер телефона успешно изменен");
+                }
 
             }
             catch (Exception ex)
@@ -497,7 +477,9 @@ namespace Bank_System
         {
             return number == PhoneNumber;
         }
-        private void ShowHiddenNumber(string number) 
+
+
+        private void ShowHiddenNumber(string number)  //для проверки юзера
         {
             for (int i = 0; i < number.Length; i++)
             {
@@ -520,47 +502,9 @@ namespace Bank_System
         }
 
         //PASSWORD
-        private void ChangePassword()
-        {
-            Console.WriteLine(@"Вы действительно желаете сменить пароль? : [д]\[н] ");
-            string? answ;
-            try
-            {
-                if (string.IsNullOrEmpty(answ = Console.ReadLine()))
-                {
-
-                    throw new Exception("Некорректный ответ");
-                }
-                else
-                {
-                    switch (answ)
-                    {
-                        case "д":
-                            {
-                                ConfirmPassword();
-                                break;
-                            }
-                        case "н":
-                            {
-                                Console.WriteLine("Возвращаем...");
-                                break;
-                            }
-                        default:
-                            {
-                                throw new Exception("Некорректный ответ");
-                            }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-        }
 
 
-        private void ConfirmPassword() 
+        private void ChangePassword() 
         {
             Console.Write("Введите текущий пароль: ");
             try
@@ -584,7 +528,7 @@ namespace Bank_System
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.ToString());
             }
 
         }
@@ -600,6 +544,10 @@ namespace Bank_System
             if (string.IsNullOrEmpty(Password = Console.ReadLine()))
             {
                 throw new Exception("Пароль не может быть пустым");
+            }
+            else
+            {
+                Message.SuccessMessage();
             }
         }
 
@@ -686,15 +634,7 @@ namespace Bank_System
             }
         }
 
-        //FULL INFA PO KARTAM
-
-        public void ShowAllCards() 
-        {
-            foreach(var el in UserCards)
-            {
-                Console.WriteLine(el);
-            }
-        }
+       
 
 
         //ТРАНЗАКЦИИЫ

@@ -2,6 +2,16 @@ namespace Bank_System;
 
 public static class Common
 {
+
+
+    public static Bank CurrentBank;
+    public static MainUser User;
+
+
+    //public static Bank GetBank()
+    //{
+    //    for
+    //}
     public static int GetAction(int maxVarAction, int minVarAction) {
         int action;
         
