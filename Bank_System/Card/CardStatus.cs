@@ -1,6 +1,6 @@
 namespace Bank_System;
 
-enum CardStatus
+public enum CardStatus
 {
     Active,
     Blocked

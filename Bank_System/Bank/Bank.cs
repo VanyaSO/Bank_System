@@ -1,6 +1,8 @@
+using Bank_System;
+
 namespace Bank_System.Bank;
 
-public class Bank
+public class Bank 
 {
     public string BankName { get; private set; }
     public CurrencyType DefaultBankCurrency { get; private set; }
@@ -8,6 +10,8 @@ public class Bank
     public float FeeSending { get; private set; } //коммка на отправку
     public float FeeReceipt{ get; private set; } //коммка на прием
     // public List<User> Users = new List<User>(); TODO: Стянуть не забудь класс юзеров.
+    
+    
 
     public Bank(string name, CurrencyType currency, List<CurrencyType> list, float feeSending, float feeReceipt)
     {

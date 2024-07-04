@@ -21,6 +21,8 @@ public static class MainMenu
     
     public static void Menu()
     {
+        MainUser? user;
+
         Console.WriteLine("Главное меню");
         Console.WriteLine("1) Вход");
         Console.WriteLine("2) Регистрация");
@@ -31,11 +33,26 @@ public static class MainMenu
         {
             case 1:
                 Console.WriteLine("Делаем Вход");
-                //Todo: вход в банк 
+                
+                //user = MainUser.LogIn();//TODO: добавит list всех юзеров
+
                 break;
             case 2:
                 Console.WriteLine("Делаем Регистрацию");
                 //Todo: регистарция в банк
+
+
+                BankUser newUser = new BankUser(); //переделать
+                newUser.Registration();
+                user = newUser;
+
+                if(user!= null)
+                {
+                    Message.SuccessMessage("Вход выполнен успешно");
+                }
+
+                //Console.WriteLine(user);
+                
                 break;
             case 0:
                 return;
