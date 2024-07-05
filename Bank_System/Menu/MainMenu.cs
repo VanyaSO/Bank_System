@@ -37,10 +37,11 @@ public static class MainMenu
                 {
 
                     MainUser.LogIn();
-                    Console.WriteLine(Common.User);//Удалить,для теста
+                    //Console.WriteLine(Common.User);//Удалить,для теста
                     if (Common.User != null)
                     {
                         Message.SuccessMessage("Вход выполнен успешно");
+                        //PersonMenu.Menu(); 
                     }
 
                 }
@@ -72,9 +73,8 @@ public static class MainMenu
                 Console.WriteLine("Делаем Регистрацию");
                 //Todo: регистарция в банк
 
-                BankUser newUser = new BankUser(); //переделать
-                newUser.Registration();
-                Common.User = newUser;
+                Common.User = new BankUser();
+                (Common.User as BankUser).Registration();
 
        
 

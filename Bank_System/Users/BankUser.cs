@@ -14,9 +14,9 @@ namespace Bank_System
 {
     internal class BankUser : MainUser
     {
-        
 
-        private  DateTime BDate { get; set; } // не меняется 
+
+        private readonly DateOnly BDate; // не меняется 
         public string PhoneNumber { get; set; } // меняетя 
         private string ID { get; set; } // не меняется 
 
@@ -24,7 +24,7 @@ namespace Bank_System
 
 
         public BankUser() : base() { UserCards = new List<Card>() {}; }
-        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateTime date,List<Card> userCards) : base(name,login, pass,Role.BankUser)
+        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date,List<Card> userCards) : base(name,login, pass,Role.BankUser)
         {
             
             BDate = date;
@@ -32,7 +32,7 @@ namespace Bank_System
             ID = id;
             UserCards = userCards;
         }
-        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateTime date) : base(name,login, pass,Role.BankUser)
+        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date) : base(name,login, pass,Role.BankUser)
         {
             
             BDate = date;
@@ -68,23 +68,14 @@ namespace Bank_System
                     throw new Exception("Пароль не может быть пустым");
                 }
 
-                Console.Write("Введите дату Вашего рождения: ");
-                string? date;
-                if (string.IsNullOrEmpty(date = Console.ReadLine()))
+                Console.Write("Ввелитте дату рождения");
+
+                DateOnly dateB = DateOnly.Parse(Console.ReadLine());
+                if ((DateTime.Today.Year - dateB.Year) <= 18)
                 {
-                    throw new Exception("Дата рождения не может бюьб пустой");
+                  throw new Exception("Ваш возраст меньше 18");  //добавить проверку на день
                 }
-                else
-                {
-
-                    string[] parts = date.Split(' ');
-                    int day = Convert.ToInt16(parts[0]);
-                    int month = Convert.ToInt16(parts[1]);
-                    int year = Convert.ToInt16(parts[2]);
-
-
-                    BDate = new DateTime(year, month, day);
-                }
+              
 
 
                 Console.Write("Введите PassID [или нажмите [Enter] для автоматического создания ID]: ");
@@ -498,7 +489,7 @@ namespace Bank_System
         //
         public override string ToString()
         {
-            return $"ID:{ID}\n{base.ToString()}\nДата рождения: {BDate.Date.ToShortDateString()}\nНомер телефона: {PhoneNumber}";
+            return $"ID:{ID}\n{base.ToString()}\nДата рождения: {BDate.ToString()}\nНомер телефона: {PhoneNumber}";
         }
 
         //PASSWORD
@@ -547,7 +538,7 @@ namespace Bank_System
             }
             else
             {
-                Message.SuccessMessage();
+                Message.SuccessMessage("Пароль успешно изменен");
             }
         }
 
@@ -578,7 +569,7 @@ namespace Bank_System
         }
 
 
-        private void ShowAvailibleCurrency()//показывает доступные валюты
+        private void ShowAvailibleCurrency()//показывает доступные валюты длч открытия
         {
             foreach(CurrencyType currency in Enum.GetValues(typeof(CurrencyType)))
             {
@@ -634,7 +625,29 @@ namespace Bank_System
             }
         }
 
+
+        ///БЛОК КАРТЫ 
        
+        public void BlockCard(string number)
+        {
+            
+                
+            if(!string.IsNullOrEmpty(number) && number.Length != 16)
+            {
+                Card? blockCard = GetCardByNumber(number);
+                if(blockCard != null)
+                {
+                    blockCard.BlockCard();
+                }
+                else
+                {
+                    throw new Exception("Карта с таким номером не найдена");
+                }
+
+            }
+            throw new Exception("Поле строки не может быть пустым");
+            
+        }
 
 
         //ТРАНЗАКЦИИЫ
@@ -642,16 +655,16 @@ namespace Bank_System
         {
 
             MyTransactionMenu();
-            string? choice = Console.ReadLine();
+            int action = MainMenu.GetActionMenu(1, 2);
 
-            switch(choice)
+            switch(action)
             {
-                case "1":
+                case 1:
                 {
                      ShowMySendedTransaction();
                      break;
                 }
-                case "2":
+                case 2:
                 {
                     ShowCompletedTransaction();
                     break;
@@ -666,12 +679,12 @@ namespace Bank_System
         {
             Console.WriteLine("1) Показать все отправленые транзакции");
             Console.WriteLine("2) Показать все принятые транзакции");
-            Console.WriteLine("3) Показать общую сумму отправленных средств");
+      
             Console.WriteLine("----");
             Console.WriteLine("Введите ответ: ");
         }
 
-        ///ТРАНЗАКЦИИ ОТПРАВЛЕННЫЕ
+        ///ТРАНЗАКЦИИ ОТПРАВЛЕННЫЕ??? перенеси в Personenu();
         private void ShowMySendedTransaction()
         {
             foreach(Card card in UserCards)

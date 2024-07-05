@@ -46,46 +46,6 @@ namespace Bank_System
 
         }
 
-
-        //public void ChangeAdmin()
-        //{
-        //    string? answ;
-        //    Console.Write(@"Вы уверенный что хотите сменить пароль?: [д]\[н] ");
-        //    try
-        //    {
-
-        //        if (string.IsNullOrEmpty(answ = Console.ReadLine()))
-        //        {
-        //            throw new Exception("Некорректный ответ");
-        //        }
-        //        else
-        //        {
-        //            switch (answ)
-        //            {
-        //                case "д":
-        //                    {
-        //                        ConfirmPass(this);
-        //                        break;
-        //                    }
-        //                case "н":
-        //                    {
-        //                        Console.Write("Возвращение..");
-        //                        break;
-        //                    }
-        //                default:
-        //                    {
-        //                        throw new Exception("Некорректный выбор: ");
-        //                    }
-        //            }
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //}
-
        
         private void ChangePass()
         {
@@ -111,18 +71,7 @@ namespace Bank_System
             return base.ToString();
         }
 
-        //public MainUser? Loginin(string login, string password, List<MainUser> users)
-        //{
-        //    foreach (var account in users)
-        //    {
-
-        //        if (account.Login == login && account.Password == password)
-        //        {
-        //            return account;
-        //        }
-        //    }
-        //    return null;
-        //}
+        
 
 
 

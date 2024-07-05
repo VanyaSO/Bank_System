@@ -34,6 +34,7 @@ public static class PersonMenu
                 Console.WriteLine("Открыть карту");
                 try
                 {
+
                     user.OpenNewCard();
                 }
                 catch (Exception ex) {
@@ -49,6 +50,18 @@ public static class PersonMenu
             case 4:
                 Console.WriteLine("Заблокировать карту");
                 //Todo: Заблокировать карту
+                Console.Write("Введите номер карты котрую хотите заблокировать: ");
+                string cardNumber = Console.ReadLine();
+
+                try
+                {
+                    user.BlockCard(cardNumber);
+
+                }
+                catch(Exception ex)
+                {
+                    Message.ErrorMessage(ex.Message);
+                }
                 break;
             case 5:
                 Console.WriteLine("Курс валют");
@@ -57,6 +70,9 @@ public static class PersonMenu
             case 6:
                 Console.WriteLine("Мои транзакции");
                 //Todo: мои Транзакции
+
+
+                ///Выдать список карт,запрос карты у юзера, вывод тразакции по карте(общий);
                 break;
             case 0:
                 return;
