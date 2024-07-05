@@ -2,8 +2,18 @@ namespace Bank_System;
 
 public static class PersonMenu
 {
+    
+
     public static void Menu()
     {
+
+        BankUser? user = new BankUser();
+
+        if(Common.User.UserRole == Role.BankUser)
+        {
+            user = Common.User as BankUser;
+        }
+
         Console.WriteLine("Меню пользователя");
         Console.WriteLine("1) Отправить");
         Console.WriteLine("2) Открыть карту");
@@ -22,15 +32,36 @@ public static class PersonMenu
                 break;
             case 2:
                 Console.WriteLine("Открыть карту");
-                //Todo: открыть карту
+                try
+                {
+
+                    user.OpenNewCard();
+                }
+                catch (Exception ex) {
+
+                    Message.ErrorMessage(ex.Message);
+                }   
                 break;
             case 3:
                 Console.WriteLine("Информация по моим картам");
                 //Todo: Информация о картах
+                user.ShowAllCards();
                 break;
             case 4:
                 Console.WriteLine("Заблокировать карту");
                 //Todo: Заблокировать карту
+                Console.Write("Введите номер карты котрую хотите заблокировать: ");
+                string cardNumber = Console.ReadLine();
+
+                try
+                {
+                    user.BlockCard(cardNumber);
+
+                }
+                catch(Exception ex)
+                {
+                    Message.ErrorMessage(ex.Message);
+                }
                 break;
             case 5:
                 Console.WriteLine("Курс валют");
@@ -39,6 +70,9 @@ public static class PersonMenu
             case 6:
                 Console.WriteLine("Мои транзакции");
                 //Todo: мои Транзакции
+
+
+                ///Выдать список карт,запрос карты у юзера, вывод тразакции по карте(общий);
                 break;
             case 0:
                 return;
@@ -46,4 +80,6 @@ public static class PersonMenu
 
         Menu();
     }
+
+   
 }

@@ -6,7 +6,7 @@ public class Card
     private string _pinCode;
     public CurrencyType Currency { get; private set; }
     public decimal Balance { get; private set; }
-    public CardStatus Status { get; private set; }
+    public CardStatus Status {  get; set; }
     private List<Transaction> _transactions = new List<Transaction>();
     private static Random _random = new Random();
 
