@@ -21,6 +21,8 @@ public static class MainMenu
     
     public static void Menu()
     {
+        
+
         Console.WriteLine("Главное меню");
         Console.WriteLine("1) Вход");
         Console.WriteLine("2) Регистрация");
@@ -31,11 +33,53 @@ public static class MainMenu
         {
             case 1:
                 Console.WriteLine("Делаем Вход");
-                //Todo: вход в банк 
+                try
+                {
+
+                    MainUser.LogIn();
+                    //Console.WriteLine(Common.User);//Удалить,для теста
+                    if (Common.User != null)
+                    {
+                        Message.SuccessMessage("Вход выполнен успешно");
+                        //PersonMenu.Menu(); 
+                    }
+
+                }
+                catch (AccessViolationException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Хотите зарегать акк 1-Yes | 2 - No"); //изменить
+                    int action2 = GetActionMenu(2);
+                    switch (action2)
+                    {
+                        case 1:
+
+                            BankUser newUser1 = new BankUser(); //переделать
+                            newUser1.Registration();
+                            Common.User = newUser1;
+                            break;
+                        case 2:
+                            break;
+
+                        
+                        
+                    }
+                }
+
+                //user = MainUser.LogIn();//TODO: добавит list всех юзеров
+
                 break;
             case 2:
                 Console.WriteLine("Делаем Регистрацию");
                 //Todo: регистарция в банк
+
+                Common.User = new BankUser();
+                (Common.User as BankUser).Registration();
+
+       
+
+                //Console.WriteLine(user);
+                
                 break;
             case 0:
                 return;

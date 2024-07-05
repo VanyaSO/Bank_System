@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
@@ -11,71 +12,42 @@ namespace Bank_System
     {
         public Admin() : base() { }
 
-        public Admin(string name, string login, string pass) : base(name, login, pass) { }
+        public Admin(string name, string login, string pass) : base(name, login, pass, Role.Admin) { }
 
 
-
-        public void ChangeAdmin()
+        public void ShowUsersInfo(List<MainUser> users)
         {
-            string? answ;
-            Console.Write(@"Вы уверенный что хотите сменить пароль?: [д]\[н] ");
-            try
+            foreach(var user in users)
             {
 
-                if (string.IsNullOrEmpty(answ = Console.ReadLine()))
-                {
-                    throw new Exception("Некорректный ответ");
-                }
-                else
-                {
-                    switch (answ)
-                    {
-                        case "д":
-                            {
-                                ConfirmPass(this);
-                                break;
-                            }
-                        case "н":
-                            {
-                                Console.Write("Возвращение..");
-                                break;
-                            }
-                        default:
-                            {
-                                throw new Exception("Некорректный выбор: ");
-                            }
-                    }
-                    
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(user); //TODO: изменить ToString();
             }
         }
 
-        private void ConfirmPass(Admin adm)
+
+        public void ChangeAdminPass()
         {
-            Console.Write("Введите свой текущий пароль: ");
-            string answPass;
-            if (string.IsNullOrEmpty(answPass = Console.ReadLine()))
-            {
+            string? answ;
+            Console.WriteLine("Введите текущий пароль: ");
+            if(string.IsNullOrEmpty(answ = Console.ReadLine())){
                 throw new Exception("Вы ввели пустую строку");
             }
             else
             {
-                if (ComparePass(answPass, adm))
+                if (ComparePass(answ))
                 {
-                    ChangePass(adm);
+                    ChangePass();
                 }
                 else
                 {
-                    throw new Exception("Введен неверный пароль");
+                    throw new Exception("Некорректный пароль");
                 }
-
             }
+
         }
-        private void ChangePass(Admin adm)
+
+       
+        private void ChangePass()
         {
             Console.Write("Введите новый пароль: ");
             string? newPass;
@@ -85,18 +57,24 @@ namespace Bank_System
             }
             else
             {
-                adm.Password = newPass;
+                Password = newPass;
             }
         }
 
-        private bool ComparePass(string pass,Admin adm)
+        private bool ComparePass(string pass)
         {
-            return pass == adm.Password;
+            return pass == Password;
         }
 
         public override string ToString()
         {
             return base.ToString();
         }
+
+        
+
+
+
+
     }
 }

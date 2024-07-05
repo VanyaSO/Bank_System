@@ -3,7 +3,7 @@ namespace Bank_System;
 public static class Common
 {
     public static Bank Bank;
-
+    public static MainUser User;
     public static int GetAction(int maxVarAction, int minVarAction)
     {
         int action;

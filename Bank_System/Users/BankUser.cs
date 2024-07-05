@@ -1,8 +1,11 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,23 +14,31 @@ namespace Bank_System
 {
     internal class BankUser : MainUser
     {
-        
 
-        public DateTime BDate { get; set; } // не меняется 
+
+        private readonly DateOnly BDate; // не меняется 
         public string PhoneNumber { get; set; } // меняетя 
-        public string ID { get; set; } // не меняется 
+        private string ID { get; set; } // не меняется 
 
-        //List<> list { get; set; }
+        private List<Card> UserCards { get; set; }
 
 
-        public BankUser() : base() { }
-        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateTime date) : base(name,login, pass)
+        public BankUser() : base() { UserCards = new List<Card>() {}; }
+        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date,List<Card> userCards) : base(name,login, pass,Role.BankUser)
         {
             
             BDate = date;
             PhoneNumber = phoneNumb;
             ID = id;
-
+            UserCards = userCards;
+        }
+        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date) : base(name,login, pass,Role.BankUser)
+        {
+            
+            BDate = date;
+            PhoneNumber = phoneNumb;
+            ID = id;
+            UserCards = new List<Card> ();
         }
 
 
@@ -57,23 +68,14 @@ namespace Bank_System
                     throw new Exception("Пароль не может быть пустым");
                 }
 
-                Console.Write("Введите дату Вашего рождения: ");
-                string? date;
-                if (string.IsNullOrEmpty(date = Console.ReadLine()))
+                Console.Write("Ввелитте дату рождения");
+
+                DateOnly dateB = DateOnly.Parse(Console.ReadLine());
+                if ((DateTime.Today.Year - dateB.Year) <= 18)
                 {
-                    throw new Exception("Дата рождения не может бюьб пустой");
+                  throw new Exception("Ваш возраст меньше 18");  //добавить проверку на день
                 }
-                else
-                {
-
-                    string[] parts = date.Split(' ');
-                    int day = Convert.ToInt16(parts[0]);
-                    int month = Convert.ToInt16(parts[1]);
-                    int year = Convert.ToInt16(parts[2]);
-
-
-                    BDate = new DateTime(year, month, day);
-                }
+              
 
 
                 Console.Write("Введите PassID [или нажмите [Enter] для автоматического создания ID]: ");
@@ -89,10 +91,15 @@ namespace Bank_System
                     throw new Exception("Телефон не может быть пустым");
 
                 }
+
+                Card newCard = new Card("0000", CurrencyType.UAH);
+                Console.WriteLine("По умолчанию PIN - 0000 Валюта: UAH");
+
+                Common.CurrentBank.Users.Add(this);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.Message);
             }
         }
 
@@ -102,44 +109,286 @@ namespace Bank_System
             return Convert.ToString(rand.Next(1000,9999));
         }
 
-        public void ChangeUser()
+        //Показать все карты
+
+        public void ShowAllCards()
         {
-            Console.WriteLine("1 - Изменить номер телефона\t2 - Изменить пароль");
-            string choice;
-            try
+            foreach (var el in UserCards)
             {
-
-                if (string.IsNullOrEmpty(choice = Console.ReadLine()))
-                {
-                    throw new Exception("Выбор не может быть пустым");
-                }
-                else
-                {
-                    Change(choice, this);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(el);
             }
         }
 
 
-        private void Change(string answ,BankUser user)
+
+        //Подтверждение PIN
+
+
+
+        //ПОПОЛНЕНИЕ КАРТЫ
+
+        public void ChooseCardForAddMoney() //общий метод для ввода
         {
+            Console.WriteLine("Активные карты: ");
+            ShowAllActiveCardNumbers();
+            try
+            {
+                string? sCardNumber;
+                if(string.IsNullOrEmpty(sCardNumber = Console.ReadLine()))
+                {
+                    throw new Exception("Вы ввели пустую строку");
+                }
+                else
+                {
+                    Card? card = GetCardByNumber(sCardNumber);
+                    if (ComparePin(card))
+                    {
+                        DepositMoneyOnBalance(GetCardByNumber(sCardNumber));
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Вы превысили лимит попыток ввода PIN\nВаша карта будет заблокирована");
+                        card.BlockCard();
+                    }
+
+                   
+                   
+                }
+            }
+            catch(Exception ex)
+            {
+                Message.ErrorMessage(ex.Message);
+            }
+        }
+        
+        
+
+        private bool ComparePin(Card card) //сравнивает и блочит карту после 3х неверных попыток
+        {
+            int count = 0;
+            do
+            {
+                
+
+                Console.Write("Введите PIN: ");
+                string? pin;
+                if (string.IsNullOrEmpty(pin = Console.ReadLine()))
+                {
+                    throw new Exception("Вы ввели пустую строку");
+                }
+                else
+                {
+                    if (card.VerifyPinCode(pin))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Неправильный PIN");
+                        Console.WriteLine($"До блокировки карты осталось: {count - 3}");//Протестить
+                    }
+                    
+                }
+
+                count++;
+                
+            } while (count!=3);
+            return false;
+        }
+
+        private void DepositMoneyOnBalance(Card? card) //внос денег
+        {
+            Console.WriteLine($"Текущий баланс: {card.Balance} [{card.Balance.ToString()}]");
+            Console.Write("Введите сумму для зачисления: ");
+            string? inputSum;
+            
+            if(string.IsNullOrEmpty(inputSum = Console.ReadLine()))
+            {
+                throw new Exception("Вы ввели пустую строку");
+            }
+            else
+            {
+                if (IsCorrectSum(decimal.Parse(inputSum))) 
+                {
+                    card.Deposit(decimal.Parse(inputSum));
+
+                }
+                
+
+            }
+        }
+
+        private bool IsCorrectSum(decimal sum)
+        {
+            return sum > 0;
+        }
+
+
+        //СНЯТИЕ ДЕНЕГ
+
+        public void ChooseCardForWitdraw()
+        {
+            Console.Write("Активные карты: ");
+            ShowAllActiveCardNumbers();
+            string sCardNumber;
+            if(string.IsNullOrEmpty(sCardNumber = Console.ReadLine()))
+            {
+                throw new Exception("Вы ввели некорректный номер");
+            }
+            else
+            {
+                Card? card = GetCardByNumber(sCardNumber);
+                if (ComparePin(card))
+                {
+                    WithdrawMoney(card);
+                }
+                else
+                {
+                    card.BlockCard();
+                }
+            }
+        }
+
+
+        private void WithdrawMoney(Card card)
+        {
+
+            Console.WriteLine($"Текущий баланс: {card.Balance} [{card.Currency.ToString()}]");
+            Console.Write("Введите сумму для снятия: ");
+            string? inputSum;
+            if(string.IsNullOrEmpty(inputSum = Console.ReadLine()))
+            {
+                throw new Exception("Вы ввели пустую строку");
+            }
+            else
+            {
+                if (IsCorrectSum(decimal.Parse(inputSum)) && HaveEnoughMoney(card,decimal.Parse(inputSum))) //если сумма корректна и хватает денег
+                {
+                    card.Withdraw(decimal.Parse(inputSum));
+
+                }
+            }
+        }
+
+        private bool HaveEnoughMoney(Card card,decimal sum) {
+            return card.Balance >= sum;
+        }
+
+        //
+
+        //ПЕРЕДАЧА ДЕНЕГ
+
+        public void SendMoney()
+        {
+            Console.WriteLine("Активные карты: ");
+            ShowAllActiveCardNumbers();
+            try
+            {
+
+                string? sCardNumber;
+                if (string.IsNullOrEmpty(sCardNumber = Console.ReadLine())){
+                    throw new Exception("Вы ввели пустую строку");
+                }
+                else
+                {
+                    //доделать туду ниже
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private Card? GetCardByNumber(string number) //возвращает карту по номеру
+        {
+            foreach (Card card in UserCards)
+            {
+                if(card.CardNumber == number)
+                {
+                    return card;
+                }
+            }
+            return null;
+        }
+
+        private void SendMoneyFromChoosenCard(Card card)
+        {
+            try
+            {
+                if (IsActive(card))
+                {
+                    //Доделать ниже туду
+                }
+                else
+                {
+                    throw new Exception("Выбранная карта заблокирована");
+                }
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+        }
+
+        private bool IsActive(Card card) //активна ли карта
+        {
+            return card.Status == CardStatus.Active;
+        }
+
+
+        private void ShowAllActiveCardNumbers() //номера карт которые активные
+        {
+            foreach(Card card in UserCards)
+            {
+                if (IsActive(card))
+                {
+                    Console.WriteLine(card.CardNumber);
+                }
+            }
+        }
+
+        //TODO: max(доделать когда в Bank будет массив юзеров)искать по номеру карты/имени
+
+        //
+
+        public void ChangeUser()//общая, для выбора
+        {
+            Console.WriteLine("1 - Изменить номер телефона\t2 - Изменить пароль");
+            int choice = MainMenu.GetActionMenu(1,2);
+            try
+            {
+
+                Change(choice);
+                
+
+            }
+            catch (Exception ex)
+            {
+                Message.ErrorMessage(ex.Message);
+            }
+        }
+
+        //ИЗМЕНЕНИЕ ПОЛЬЗОВАТЕЛЯ
+
+        private void Change(int answ)
+        {
+
             try
             {
                 switch (answ)
                 {
-                    case "1":
+                    case 1:
                         {
-                            ChangePhoneNumber(user);
+                            ChangePhoneNumber();
                             break;
                         }
-                    case "2":
+                    case 2:
                         {
-                            ChangePassword(user);
+                            ChangePassword();
                             break;
                         }
                     default:
@@ -150,66 +399,36 @@ namespace Bank_System
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.Message);
             }
         }
-        private void ChangePhoneNumber(BankUser user)
+
+
+        //ТЕЛЕФОН
+        private void ChangePhoneNumber()
         {
             Console.Write($"Текущий номер телефона:");
-            ShowHiddenNumber(user.PhoneNumber);//показывется скрыто для подтверждения пользователем
-            try
-            {
+            ShowHiddenNumber(PhoneNumber);//показывется скрыто для подтверждения пользователем
+            ConfirmPhoneNumber();
 
-                Console.Write(@"Вы уверены? [д]\[н]: ");
-                string answ;
-                if (!string.IsNullOrEmpty(answ = Console.ReadLine()))
-                {
-
-                    switch (answ)
-                    {
-                        case "д":
-                            {
-                                ConfirmPhoneNumber(user);
-
-                                break;
-                            }
-                        case "н":
-                            {
-                                Console.WriteLine("Возвращем....");
-                                break;
-                            }
-                        default:
-                            throw new Exception("Некорректный выбор");
-
-
-                    }
-                }
-                else
-                {
-                    throw new Exception("Ответ не может быть пустым");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+           
         }
-        private void ConfirmPhoneNumber(BankUser user)
+        private void ConfirmPhoneNumber()
         {
-            Console.Write("Введите текущий номер телефона: ");
+            Console.Write("Введите текущий номер телефона полностью: ");
             string userNumber;
             try
             {
                 if (string.IsNullOrEmpty(userNumber = Console.ReadLine()))
                 {
-                    throw new Exception("Поле не может быть пустым");
+                    throw new Exception("Вы ввели пустую строку");
                 }
+
                 else
                 {
-                    if (CompareNumbers(userNumber, user)) //сравнивает ввел ли пользователь с=корректный намб
+                    if (CompareNumbers(userNumber)) //сравнивает ввел ли пользователь с=корректный намб
                     {
-                        CreateNewPhoneNumber(user);//изменениее
+                        CreateNewPhoneNumber();//изменениее
                     }
                     else
                     {
@@ -219,33 +438,39 @@ namespace Bank_System
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.ToString());
             }
         }
 
-        private void CreateNewPhoneNumber(BankUser user) //изменение после проверки
+        private void CreateNewPhoneNumber() //изменение после проверки
         {
             Console.Write("Введите новый номер телефона: ");
             try
             {
 
-                if (string.IsNullOrEmpty(user.PhoneNumber = Console.ReadLine()))
+                if (string.IsNullOrEmpty(PhoneNumber = Console.ReadLine()))
                 {
                     throw new Exception("Поле не может быть пустым");
+                }
+                else
+                {
+                    Message.SuccessMessage("Номер телефона успешно изменен");
                 }
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.Message);
             }
         }
         
-        private bool CompareNumbers(string number, BankUser user) //сравнивание номеров
+        private bool CompareNumbers(string number) //сравнивание номеров
         {
-            return number == user.PhoneNumber;
+            return number == PhoneNumber;
         }
-        private void ShowHiddenNumber(string number) 
+
+
+        private void ShowHiddenNumber(string number)  //для проверки юзера
         {
             for (int i = 0; i < number.Length; i++)
             {
@@ -261,53 +486,16 @@ namespace Bank_System
             Console.WriteLine();
         }
 
+        //
         public override string ToString()
         {
-            return $"ID:{ID}\n{base.ToString()}\nДата рождения: {BDate.Date.ToShortDateString()}\nНомер телефона: {PhoneNumber}";
+            return $"ID:{ID}\n{base.ToString()}\nДата рождения: {BDate.ToString()}\nНомер телефона: {PhoneNumber}";
         }
 
-
-        private void ChangePassword(BankUser user)
-        {
-            Console.WriteLine(@"Вы действительно желаете сменить пароль? : [д]\[н] ");
-            string? answ;
-            try
-            {
-                if (string.IsNullOrEmpty(answ = Console.ReadLine()))
-                {
-
-                    throw new Exception("Некорректный ответ");
-                }
-                else
-                {
-                    switch (answ)
-                    {
-                        case "д":
-                            {
-                                ConfirmPassword(user);
-                                break;
-                            }
-                        case "н":
-                            {
-                                Console.WriteLine("Возвращаем...");
-                                break;
-                            }
-                        default:
-                            {
-                                throw new Exception("Некорректный ответ");
-                            }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-        }
+        //PASSWORD
 
 
-        private void ConfirmPassword(BankUser user)
+        private void ChangePassword() 
         {
             Console.Write("Введите текущий пароль: ");
             try
@@ -319,9 +507,9 @@ namespace Bank_System
                 }
                 else
                 {
-                    if (ComparePass(pass, user))
+                    if (ComparePass(pass))
                     {
-                        CreateNewPassword(user);
+                        CreateNewPassword();
                     }
                     else
                     {
@@ -331,25 +519,231 @@ namespace Bank_System
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Message.ErrorMessage(ex.ToString());
             }
 
         }
 
-        public bool ComparePass(string pass, BankUser user)
+        public bool ComparePass(string pass)
         {
-            return pass == user.Password;
+            return pass == Password;
         }
 
-        private void CreateNewPassword(BankUser user)
+        private void CreateNewPassword() //создание нового
         {
             Console.Write("Введите новый пароль: ");
-            if (string.IsNullOrEmpty(user.Password = Console.ReadLine()))
+            if (string.IsNullOrEmpty(Password = Console.ReadLine()))
             {
                 throw new Exception("Пароль не может быть пустым");
             }
+            else
+            {
+                Message.SuccessMessage("Пароль успешно изменен");
+            }
         }
+
+        //ОТКРЫТИЕ КАРТЫ
+        public void OpenNewCard() //TODO:обернуть при использовании в try\catch
+        {
+            
+            if(CanUserOpenNewCard())
+            {
+
+                Console.Write("Доступные валюты: ");
+                ShowAvailibleCurrency();
+                Console.Write("Введите название валюты для новой карты: ");
+                string currency;
+                if (string.IsNullOrEmpty(currency = Console.ReadLine()))
+                {
+                    throw new Exception("Вы ввели пустую строку");
+                }
+                else
+                {
+                    if (Enum.TryParse(currency, true, out CurrencyType cur))
+                    {
+                        AddNewCard(new Card(CreateNewPinForCard(), cur));
+
+                    }
+                }
+            }
+        }
+
+
+        private void ShowAvailibleCurrency()//показывает доступные валюты длч открытия
+        {
+            foreach(CurrencyType currency in Enum.GetValues(typeof(CurrencyType)))
+            {
+                if (!HaveUserCurrency(currency))
+                {
+                    Console.Write($"{currency} ") ;
+                }
+            }
+            Console.WriteLine();
+        }
+
+        private bool HaveUserCurrency(CurrencyType currency)//проверка на существование открытой карты с такой же валютой
+        {
+            
+            foreach(Card card in UserCards)
+            {
+                if(currency == card.Currency)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool CanUserOpenNewCard() //может ли открыть карту новую
+        {
+            foreach (CurrencyType currency in Enum.GetValues(typeof(CurrencyType)))
+            {
+                if (!HaveUserCurrency(currency))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private void AddNewCard(Card newCard)
+        {
+            UserCards.Add(newCard);
+        }
+
+        private string CreateNewPinForCard()//создание ПИН
+        {
+            Console.Write("Введите новый PIN(4 символа): ");
+            string newPin;
+            if(string.IsNullOrEmpty(newPin = Console.ReadLine()) || newPin.Length < 4)
+            {
+                throw new Exception("Введен некорректный PIN\n");
+            }
+            else
+            {
+                return newPin;
+            }
+        }
+
+
+        ///БЛОК КАРТЫ 
+       
+        public void BlockCard(string number)
+        {
+            
+                
+            if(!string.IsNullOrEmpty(number) && number.Length != 16)
+            {
+                Card? blockCard = GetCardByNumber(number);
+                if(blockCard != null)
+                {
+                    blockCard.BlockCard();
+                }
+                else
+                {
+                    throw new Exception("Карта с таким номером не найдена");
+                }
+
+            }
+            throw new Exception("Поле строки не может быть пустым");
+            
+        }
+
+
+        //ТРАНЗАКЦИИЫ
+        public void MyTransaction()
+        {
+
+            MyTransactionMenu();
+            int action = MainMenu.GetActionMenu(1, 2);
+
+            switch(action)
+            {
+                case 1:
+                {
+                     ShowMySendedTransaction();
+                     break;
+                }
+                case 2:
+                {
+                    ShowCompletedTransaction();
+                    break;
+                }
+            }
+
+        }
+
+
+
+        private void MyTransactionMenu() //TODO:перенести в ЮзерМеню
+        {
+            Console.WriteLine("1) Показать все отправленые транзакции");
+            Console.WriteLine("2) Показать все принятые транзакции");
+      
+            Console.WriteLine("----");
+            Console.WriteLine("Введите ответ: ");
+        }
+
+        ///ТРАНЗАКЦИИ ОТПРАВЛЕННЫЕ??? перенеси в Personenu();
+        private void ShowMySendedTransaction()
+        {
+            foreach(Card card in UserCards)
+            {
+                ShowSendTransByCard(card.GetAllTransactions());
+            }
+        }
+
+
+        private void ShowSendTransByCard(List<Transaction> cardTransaction) //конкретной карты
+        {
+            foreach(Transaction transaction in cardTransaction)
+            {
+                if(IsSendByMe(transaction))
+                {
+                    Console.WriteLine(transaction.ToString());
+                }
+            }
+        }
+
+        private bool IsSendByMe(Transaction trans) //пользователем ли отправлена?
+        {
+            return trans.SenderInitials == Name;
+        }
+        
+        //ТРАНЗАКЦИИ ПРИНЯТЫЕ
+
+
+        private void ShowCompletedTransaction() //общая для получатель(Мы)
+        {
+            foreach(Card card in UserCards)
+            {
+                ShowCompletedTransactionByCard(card.GetAllTransactions());
+            }
+        }
+
+        private void ShowCompletedTransactionByCard(List<Transaction> cardTransaction) //по каждой карте траназкция в которой мы получатель
+        {
+            foreach(Transaction transaction in cardTransaction)
+            {
+                if (IsCompleted(transaction))
+                {
+                    Console.WriteLine(transaction.ToString());
+                }
+            }
+        }
+        
+        private bool IsCompleted(Transaction transaction) //являемся ли мы получателем
+        {
+            return transaction.RecipientName == Name;
+        }
+
+        //СУММА ОТПРАВЛЕННЫХ
+
+        //TODO:остановился тут 15:55
     }
+
+
+
 
     
 }
