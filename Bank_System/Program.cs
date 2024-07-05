@@ -5,6 +5,7 @@ class Program
     static void Main()
     {
         Common.Bank = new Bank("MonoBank", 2.0, 2.0);
+        Common.StartProgram();
         Console.ReadKey();
         // MainMenu.Menu();
         // Card card = new Card("1234", CurrencyType.UAH);
