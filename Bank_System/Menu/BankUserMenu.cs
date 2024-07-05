@@ -100,11 +100,7 @@ public static class BankUserMenu
                 try
                 {
                     Console.Write("Введите номер карты котрую хотите заблокировать: ");
-                    string cardNumber;
-                    if (string.IsNullOrEmpty(cardNumber = Console.ReadLine())) 
-                    {
-                        throw new Exception("Введена пустая строка");
-                    }
+                    string cardNumber = Console.ReadLine();
                     user.BlockCard(cardNumber);
 
                 }
