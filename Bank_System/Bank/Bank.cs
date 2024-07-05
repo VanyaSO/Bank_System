@@ -31,20 +31,7 @@ public class Bank
         else throw new ArgumentException("Fee can't be less than 0 and greater than 100");
     }
 
-    public Bank(string name, CurrencyType currency, float feeSending, float feeReceipt, List<MainUser> users)///жобавил я
-    {
-        BankName = name;
-        DefaultBankCurrency = currency;
-        
-
-        Users = users;
-
-            FeeReceipt = feeReceipt;
-
-        
-            FeeSending = feeSending;
-       
-    }
+  
 
 
 }

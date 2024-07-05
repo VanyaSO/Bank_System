@@ -40,16 +40,16 @@ class Program
 
         Admin adm1 = new Admin("Admin1","adm1","0000");
         
-        BankUser user1 = new BankUser("User1", "user1", "1111", "1", "0101", new DateTime(2000, 01, 01));
-        BankUser user2 = new BankUser("User2", "user2", "2222", "2", "0202", new DateTime(2002, 02, 02));
-        BankUser user3 = new BankUser("User3", "user3", "3333", "3", "0303", new DateTime(2003, 03, 03));
+        BankUser user1 = new BankUser("User1", "user1", "1111", "1", "0101", new DateOnly(2000, 01, 01));
+        BankUser user2 = new BankUser("User2", "user2", "2222", "2", "0202", new DateOnly(2002, 02, 02));
+        BankUser user3 = new BankUser("User3", "user3", "3333", "3", "0303", new DateOnly(2003, 03, 03));
 
 
         List<MainUser> list = new List<MainUser?>() { adm1, user1, user2, user3 };
 
-        Bank bank1 = new Bank("bank1", CurrencyType.UAH,10.0f,5.6f,list);
+        //Bank bank1 = new Bank("bank1", CurrencyType.UAH,10.0f,5.6f,list);
 
-        Common.CurrentBank = bank1;
+        //Common.CurrentBank = bank1;
 
         MainMenu.Menu();
 
