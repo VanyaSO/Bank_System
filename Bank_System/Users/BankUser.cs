@@ -371,57 +371,10 @@ namespace Bank_System
             return $"ID:{ID}\n{base.ToString()}\nДата рождения: {BDate.ToString()}\nНомер телефона: {PhoneNumber}";
         }
 
-        //PASSWORD
+       
 
 
-        //private void ChangePassword() 
-        //{
-        //    Console.Write("Введите текущий пароль: ");
-        //    try
-        //    {
-        //        string? pass;
-        //        if (string.IsNullOrEmpty(pass = Console.ReadLine()))
-        //        {
-        //            throw new Exception("Пароль не может быть пустым");
-        //        }
-        //        else
-        //        {
-        //            if (ComparePass(pass))
-        //            {
-        //                CreateNewPassword();
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("Некорректный пароль");
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Message.ErrorMessage(ex.ToString());
-        //    }
-
-        //}
-
-        //public bool ComparePass(string pass)
-        //{
-        //    return pass == Password;
-        //}
-
-        private void CreateNewPassword() //создание нового
-        {
-            Console.Write("Введите новый пароль: ");
-            if (string.IsNullOrEmpty(Password = Console.ReadLine()))
-            {
-                throw new Exception("Пароль не может быть пустым");
-            }
-            else
-            {
-                Message.SuccessMessage("Пароль успешно изменен");
-            }
-        }
-
-        //ОТКРЫТИЕ КАРТЫ
+       
 
 
         public void OpenNewCard(string pin,CurrencyType currency)
