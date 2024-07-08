@@ -19,12 +19,11 @@ namespace Bank_System
         private readonly DateOnly BDate; // не меняется 
         public string PhoneNumber { get; set; } // меняетя 
         private string ID { get; set; } // не меняется 
-
         private List<Card> UserCards { get; set; }
 
 
         public BankUser() : base() { UserCards = new List<Card>() {}; }
-        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date,List<Card> userCards) : base(name,login, pass,Role.BankUser)
+        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date,List<Card> userCards) : base(name,login, pass, Role.BankUser)
         {
             
             BDate = date;
@@ -32,7 +31,7 @@ namespace Bank_System
             ID = id;
             UserCards = userCards;
         }
-        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date) : base(name,login, pass,Role.BankUser)
+        public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date) : base(name,login, pass, Role.BankUser)
         {
             
             BDate = date;
@@ -89,13 +88,12 @@ namespace Bank_System
                 if (string.IsNullOrEmpty(PhoneNumber = Console.ReadLine()))
                 {
                     throw new Exception("Телефон не может быть пустым");
-
                 }
 
                 Card newCard = new Card("0000", CurrencyType.UAH);
                 Console.WriteLine("По умолчанию PIN - 0000 Валюта: UAH");
 
-                Common.CurrentBank.Users.Add(this);
+                Common.Bank.Users.Add(this);
             }
             catch (Exception ex)
             {
@@ -103,11 +101,7 @@ namespace Bank_System
             }
         }
 
-        private string CreateNewId()
-        {
-            Random rand = new Random();
-            return Convert.ToString(rand.Next(1000,9999));
-        }
+        private string CreateNewId() => Convert.ToString(Common.Random.Next(1000,9999));
 
         //Показать все карты
 
@@ -169,8 +163,6 @@ namespace Bank_System
             int count = 0;
             do
             {
-                
-
                 Console.Write("Введите PIN: ");
                 string? pin;
                 if (string.IsNullOrEmpty(pin = Console.ReadLine()))
@@ -495,7 +487,7 @@ namespace Bank_System
         //PASSWORD
 
 
-        private void ChangePassword() 
+        public void ChangePassword() 
         {
             Console.Write("Введите текущий пароль: ");
             try

@@ -23,7 +23,8 @@ public static class Query
     }
     public static async void GetСurrencyRates()
     {
-        string path = Config.CurrencyRatesPath;
+        
+        string path = Common.PathCurrencyRates;
         // список валют банка 
         List<Currency> listCurrency = new List<Currency>();
 
@@ -35,7 +36,7 @@ public static class Query
         catch (Exception e)
         {
             // делаем запрос и получаем новые данные
-            string url = Config.ApiCurrencyRates;
+            string url = Common.ApiCurrencyRates;
             HttpClient client = new HttpClient();
             var response = await client.GetAsync(url);
 
@@ -46,7 +47,7 @@ public static class Query
                 {
                     // список все полученых курсов
                     List<Currency> listGetCurrency = JsonConvert.DeserializeObject<List<Currency>>(content);
-                    // новая дата носледнего обновленич
+                    // новая дата носледнего обновления
                     string dateLastUpdate = DateOnly.FromDateTime(DateTime.Today).ToString("dd.MM.yyyy");
 
                     foreach (var currency in listGetCurrency)
@@ -56,10 +57,9 @@ public static class Query
                     }
 
                     // курс валюты по умолчанию
-                    listCurrency.Add(new Currency(Common.Bank.Currency, 1));
+                    listCurrency.Add(new Currency("UAH", 1));
 
-                    string json =
-                        JsonConvert.SerializeObject(new { dateLastUpdate, listCurrency }, Formatting.Indented);
+                    string json = JsonConvert.SerializeObject(new { dateLastUpdate, listCurrency }, Formatting.Indented);
                     File.WriteAllText(path, json);
                 }
             }
@@ -69,7 +69,7 @@ public static class Query
             // сохраняем все курсы валют
             foreach (var currency in listCurrency)
             {
-                Common.Bank.Currencies.Add(currency.Cc, currency.Rate);
+                Common.Bank.Currencies.Add(Common.ParseStringToCurrencyType(currency.Cc), currency.Rate);
             }
         }
     }

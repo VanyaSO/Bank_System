@@ -8,7 +8,6 @@ public class Card
     public decimal Balance { get; private set; }
     public CardStatus Status {  get; set; }
     private List<Transaction> _transactions = new List<Transaction>();
-    private static Random _random = new Random();
 
     public Card(string pinCode, CurrencyType currency, decimal initialBalance = 0)
     {
@@ -27,7 +26,7 @@ public class Card
 
         for (int i = 0; i < cardNumberLength; i++)
         {
-            cardNumber[i] = (char)('0' + _random.Next(0, 10));
+            cardNumber[i] = (char)('0' + Common.Random.Next(0, 10));
         }
 
         return new string(cardNumber);

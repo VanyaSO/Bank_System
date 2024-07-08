@@ -16,8 +16,9 @@ class Program
         //card.SetPinCode("4321");
         //card.VerifyPinCode("3432");
         //card.VerifyPinCode("4321");
-        Common.Bank = new Bank("MonoBank", 2.0, 2.0);
+        Common.Bank = new Bank("MonoBank", "UAH",2.0, 2.0);
         Common.StartProgram();
+        Common.FinishProgram();
         Console.ReadKey();
         // MainMenu.Menu();
         // Card card = new Card("1234", CurrencyType.UAH);

@@ -19,7 +19,6 @@ namespace Bank_System
         {
             foreach(var user in users)
             {
-
                 Console.WriteLine(user); //TODO: изменить ToString();
             }
         }
