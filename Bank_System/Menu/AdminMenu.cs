@@ -1,6 +1,6 @@
 namespace Bank_System;
 
-public static class AminMenu
+public static class AdminMenu
 {
     public static void Menu()
     {
@@ -64,6 +64,7 @@ public static class AminMenu
                             else
                             {
                                 admin.ChangePass(newPass);
+                                Message.SuccessMessage("Пароль успешно изменен");
                             }
                         }
                         else

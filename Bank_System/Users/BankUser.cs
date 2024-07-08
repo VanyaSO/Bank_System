@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security;
@@ -20,7 +21,7 @@ namespace Bank_System
         public string PhoneNumber { get; set; } // меняетя 
         private string ID { get; set; } // не меняется 
 
-        private List<Card> UserCards { get; set; }
+        public List<Card> UserCards { get; set; }
 
 
         public BankUser() : base() { UserCards = new List<Card>() {}; }
@@ -220,7 +221,7 @@ namespace Bank_System
             }
         }
 
-        private Card? GetCardByNumber(string number) //возвращает карту по номеру
+        public Card? GetCardByNumber(string number) //возвращает карту по номеру
         {
             foreach (Card card in UserCards)
             {
@@ -229,7 +230,7 @@ namespace Bank_System
                     return card;
                 }
             }
-            return null;
+            throw new Exception("Карта не найдена");
         }
 
         private void SendMoneyFromChoosenCard(Card card)
@@ -274,141 +275,22 @@ namespace Bank_System
 
         //TODO: max(доделать когда в Bank будет массив юзеров)искать по номеру карты/имени
 
-        //
-
-        //public void ChangeUser()//общая, для выбора
-        //{
-        //    Console.WriteLine("1 - Изменить номер телефона\t2 - Изменить пароль");
-        //    int choice = MainMenu.GetActionMenu(1,2);
-        //    try
-        //    {
-
-        //        Change(choice);
+        
 
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Message.ErrorMessage(ex.Message);
-        //    }
-        //}
-
-        //ИЗМЕНЕНИЕ ПОЛЬЗОВАТЕЛЯ
-
-        //private void Change(int answ)
-        //{
-
-        //    try
-        //    {
-        //        switch (answ)
-        //        {
-        //            case 1:
-        //                {
-        //                    ChangePhoneNumber();
-        //                    break;
-        //                }
-        //            case 2:
-        //                {
-        //                    ChangePassword();
-        //                    break;
-        //                }
-        //            default:
-        //                {
-        //                    throw new Exception("Некорректный выбор");
-        //                }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Message.ErrorMessage(ex.Message);
-        //    }
-        //}
-
-
-        //ТЕЛЕФОН
-        //private void ChangePhoneNumber()
-        //{
-        //    Console.Write($"Текущий номер телефона:");
-        //    ShowHiddenNumber(PhoneNumber);//показывется скрыто для подтверждения пользователем
-        //    ConfirmPhoneNumber();
-
-        //}
-        //    //}
-        //    private void ConfirmPhoneNumber()
-        //{
-        //    Console.Write("Введите текущий номер телефона полностью: ");
-        //    string userNumber;
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(userNumber = Console.ReadLine()))
-        //        {
-        //            throw new Exception("Вы ввели пустую строку");
-        //        }
-
-        //        else
-        //        {
-        //            if (CompareNumbers(userNumber)) //сравнивает ввел ли пользователь с=корректный намб
-        //            {
-        //                CreateNewPhoneNumber();//изменениее
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("Вы ввели некоректный номер");
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Message.ErrorMessage(ex.ToString());
-        //    }
-        //}
-
-
-
-        //
         public override string ToString()
         {
             return $"ID:{ID}\n{base.ToString()}\nДата рождения: {BDate.ToString()}\nНомер телефона: {PhoneNumber}";
         }
 
-       
-
-
-       
-
-
+      
         public void OpenNewCard(string pin,CurrencyType currency)
         {
              Card newCard = new Card(pin, currency);
              AddNewCard(newCard);
         }
 
-        //public void OpenNewCard() //TODO:обернуть при использовании в try\catch
-        //{
-            
-        //    if(CanUserOpenNewCard())
-        //    {
-
-        //        Console.Write("Доступные валюты: ");
-        //        ShowAvailibleCurrency();
-        //        Console.Write("Введите название валюты для новой карты: ");
-        //        string currency;
-        //        if (string.IsNullOrEmpty(currency = Console.ReadLine()))
-        //        {
-        //            throw new Exception("Вы ввели пустую строку");
-        //        }
-        //        else
-        //        {
-        //            if (Enum.TryParse(currency, true, out CurrencyType cur))
-        //            {
-        //                Card newCard = new Card(CurrencyType.UAH);
-        //                CreateNewPinForCard(newCard);
-        //                AddNewCard(newCard);
-
-        //            }
-        //        }
-        //    }
-        //}
+  
 
 
         public void ShowAvailibleCurrency()//показывает доступные валюты длч открытия
@@ -453,18 +335,7 @@ namespace Bank_System
             UserCards.Add(newCard);
         }
 
-        private void CreateNewPinForCard(string pin,Card card)//создание ПИН
-        {
-            
-            if(string.IsNullOrEmpty(pin = Console.ReadLine()) || pin.Length < 4)
-            {
-                throw new Exception("Введен некорректный PIN\n");
-            }
-            else
-            {
-                card.SetPinCode(pin);
-            }
-        }
+        
 
 
         ///БЛОК КАРТЫ 
@@ -473,12 +344,13 @@ namespace Bank_System
         {
             
                 
-            if(!string.IsNullOrEmpty(number) && number.Length != 16)
+            if(!string.IsNullOrEmpty(number))
             {
                 Card? blockCard = GetCardByNumber(number);
                 if(blockCard != null)
                 {
                     blockCard.BlockCard();
+                    Message.SuccessMessage($"Карта {number} успешно заблокирована");
                 }
                 else
                 {
@@ -486,97 +358,232 @@ namespace Bank_System
                 }
 
             }
-            throw new Exception("Поле строки не может быть пустым");
+            else
+            {
+                throw new Exception("Поле строки не может быть пустым");
+
+            }
             
         }
 
 
-        //ТРАНЗАКЦИИЫ
-        public void MyTransaction()
+        
+
+        public void ShowSendedTransactionByCard(List<Transaction> list)
         {
-
-            MyTransactionMenu();
-            int action = MainMenu.GetActionMenu(1, 2);
-
-            switch(action)
+            if(list.Count > 0)
             {
-                case 1:
+
+                foreach (var el in list)
                 {
-                     ShowMySendedTransaction();
-                     break;
+                    if(el.RecipientName == Common.User.Name)
+                    {
+                        Console.WriteLine(el);
+                    }
                 }
-                case 2:
+            }
+            else
+            {
+                throw new Exception("Нет доступных транзакций");
+            }
+        }
+
+
+        public void ShowCompleteTransactionByCard(List<Transaction> list)
+        {
+            if(list.Count > 0)
+            {
+
+                foreach(var el in list)
                 {
-                    ShowCompletedTransaction();
-                    break;
+                    if(el.SenderInitials == Common.User.Name)
+                    {
+                        Console.WriteLine(el);
+
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Нет доступных транзакций");
+            }
+        }
+     
+        public void ShowCompleteSum(Card card)
+        {
+            decimal localSum = 0;
+
+            foreach(Transaction transaction in card.GetAllTransactions())
+            {
+                if(transaction.RecipientName == Name)
+                {
+                    localSum += transaction.Amount;
+                }
+
+
+            }
+
+            Console.WriteLine($"{card.CardNumber}: {localSum} [{card.Currency}]");
+            
+        }
+
+
+        public void ShowSendedSum(Card card)
+        {
+            
+
+            decimal localSum = 0;
+
+            foreach(Transaction transaction in card.GetAllTransactions())
+            {
+                if(transaction.SenderInitials == Name) 
+                {
+                    localSum += transaction.Amount;
                 }
             }
 
+            Console.WriteLine($"{card.CardNumber}: {localSum} [{card.Currency}]");
+           
+            
+            
         }
 
 
 
-        private void MyTransactionMenu() //TODO:перенести в ЮзерМеню
+
+
+        public void SendMoney(Card card,Card cardForTranf)
         {
-            Console.WriteLine("1) Показать все отправленые транзакции");
-            Console.WriteLine("2) Показать все принятые транзакции");
+            string sumForSend;
+            if (string.IsNullOrEmpty(sumForSend = Console.ReadLine()))
+            {
+                throw new Exception("Вы ввели пустую строку");
+            }
+            else
+            {
+                decimal resultSum = Int32.Parse(sumForSend);
+                card.Transfer(cardForTranf, resultSum, card.Currency, Name);
+                Message.SuccessMessage("Перевод успешно выполнен");
+            }
+        }
+
+        public Card? GetCardForTransfer(string number)
+        {
+
+            List<BankUser> users = GetListUsers();
+
+            foreach(var el in users) {
+               foreach(Card card in el.UserCards)
+               {
+                    if(card.CardNumber == number)
+                    {
+                        return card;
+                    }
+               }
+            }
+            throw new Exception("Карта не найдена");
+        }
+
+        private List<BankUser> GetListUsers()
+        {
+            List<BankUser> users = new List<BankUser>();
+
+            foreach(var user in Common.Bank.Users) {
+                if(user.UserRole == Role.BankUser)
+                {
+                    users.Add(user as BankUser);
+                }
+            }
+
+            return users;
+        }
+
+        //ТРАНЗАКЦИИ
+        //public void MyTransaction()
+        //{
+
+        //    MyTransactionMenu();
+        //    int action = MainMenu.GetActionMenu(1, 2);
+
+        //    switch(action)
+        //    {
+        //        case 1:
+        //        {
+        //             ShowMySendedTransaction();
+        //             break;
+        //        }
+        //        case 2:
+        //        {
+        //            ShowCompletedTransaction();
+        //            break;
+        //        }
+        //    }
+
+        //}
+
+
+
+        //private void MyTransactionMenu() //TODO:перенести в ЮзерМеню
+        //{
+        //    Console.WriteLine("1) Показать все отправленые транзакции");
+        //    Console.WriteLine("2) Показать все принятые транзакции");
       
-            Console.WriteLine("----");
-            Console.WriteLine("Введите ответ: ");
-        }
+        //    Console.WriteLine("----");
+        //    Console.WriteLine("Введите ответ: ");
+        //}
 
-        ///ТРАНЗАКЦИИ ОТПРАВЛЕННЫЕ??? перенеси в Personenu();
-        private void ShowMySendedTransaction()
-        {
-            foreach(Card card in UserCards)
-            {
-                ShowSendTransByCard(card.GetAllTransactions());
-            }
-        }
+        /////ТРАНЗАКЦИИ ОТПРАВЛЕННЫЕ??? перенеси в Personenu();
+        //private void ShowMySendedTransaction()
+        //{
+        //    foreach(Card card in UserCards)
+        //    {
+        //        ShowSendTransByCard(card.GetAllTransactions());
+        //    }
+        //}
 
 
-        private void ShowSendTransByCard(List<Transaction> cardTransaction) //конкретной карты
-        {
-            foreach(Transaction transaction in cardTransaction)
-            {
-                if(IsSendByMe(transaction))
-                {
-                    Console.WriteLine(transaction.ToString());
-                }
-            }
-        }
+        //private void ShowSendTransByCard(List<Transaction> cardTransaction) //конкретной карты
+        //{
+        //    foreach(Transaction transaction in cardTransaction)
+        //    {
+        //        if(IsSendByMe(transaction))
+        //        {
+        //            Console.WriteLine(transaction.ToString());
+        //        }
+        //    }
+        //}
 
-        private bool IsSendByMe(Transaction trans) //пользователем ли отправлена?
-        {
-            return trans.SenderInitials == Name;
-        }
+        //private bool IsSendByMe(Transaction trans) //пользователем ли отправлена?
+        //{
+        //    return trans.SenderInitials == Name;
+        //}
         
-        //ТРАНЗАКЦИИ ПРИНЯТЫЕ
+        ////ТРАНЗАКЦИИ ПРИНЯТЫЕ
 
 
-        private void ShowCompletedTransaction() //общая для получатель(Мы)
-        {
-            foreach(Card card in UserCards)
-            {
-                ShowCompletedTransactionByCard(card.GetAllTransactions());
-            }
-        }
+        //private void ShowCompletedTransaction() //общая для получатель(Мы)
+        //{
+        //    foreach(Card card in UserCards)
+        //    {
+        //        ShowCompletedTransactionByCard(card.GetAllTransactions());
+        //    }
+        //}
 
-        private void ShowCompletedTransactionByCard(List<Transaction> cardTransaction) //по каждой карте траназкция в которой мы получатель
-        {
-            foreach(Transaction transaction in cardTransaction)
-            {
-                if (IsCompleted(transaction))
-                {
-                    Console.WriteLine(transaction.ToString());
-                }
-            }
-        }
+        //private void ShowCompletedTransactionByCard(List<Transaction> cardTransaction) //по каждой карте траназкция в которой мы получатель
+        //{
+        //    foreach(Transaction transaction in cardTransaction)
+        //    {
+        //        if (IsCompleted(transaction))
+        //        {
+        //            Console.WriteLine(transaction.ToString());
+        //        }
+        //    }
+        //}
         
-        private bool IsCompleted(Transaction transaction) //являемся ли мы получателем
-        {
-            return transaction.RecipientName == Name;
-        }
+        //private bool IsCompleted(Transaction transaction) //являемся ли мы получателем
+        //{
+        //    return transaction.RecipientName == Name;
+        //}
 
         //СУММА ОТПРАВЛЕННЫХ
 

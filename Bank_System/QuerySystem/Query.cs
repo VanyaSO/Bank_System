@@ -11,7 +11,7 @@ public static class Query
     static void Deserialize(string path, ref List<Currency> list)
     {
         var deserializedObj = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(path));
-        
+
         string dateLastUpdate = deserializedObj.dateLastUpdate.ToString();
         string dateToday = DateOnly.FromDateTime(DateTime.Today).ToString("dd.MM.yyyy");
         if (dateLastUpdate.CompareTo(dateToday) != 0)
