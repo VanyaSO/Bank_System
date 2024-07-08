@@ -19,6 +19,17 @@ public class Card
         
     }
 
+    public Card(CurrencyType currency, decimal initialBalance = 0)
+    {
+        CardNumber = GenerateCardNumber();
+        
+        Currency = currency;
+        Status = CardStatus.Active;
+        Balance = initialBalance;
+
+    }
+
+
     private static string GenerateCardNumber()
     {
         const int cardNumberLength = 16;

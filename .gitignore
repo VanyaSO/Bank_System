@@ -4,4 +4,5 @@ Bank_System/bin
 Bank_System.sln
 Bank_System/Bank_System.csproj
 *.csproj
+.vs
 
