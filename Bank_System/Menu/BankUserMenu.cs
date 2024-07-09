@@ -26,7 +26,40 @@ public static class BankUserMenu
         {
             case 1:
                 Console.WriteLine("Отправить");
-                //Todo: отправка валюты
+                try
+                {
+
+                    Console.WriteLine("Список доступных карт: ");
+                    user.ShowAllActiveCards();
+
+                    Console.WriteLine("Введите номер карты с которой хотите перевести средства: ");
+                    string cardNumber;
+                    if(string.IsNullOrEmpty(cardNumber = Console.ReadLine()))
+                    {
+                        throw new Exception("Вы ввели пустую строку");
+                    }
+                    else
+                    {
+                        Card userCard = user.GetCardByNumber(cardNumber);
+                        string cardNumberRec;
+                        if(string.IsNullOrEmpty(cardNumberRec = Console.ReadLine()))
+                        {
+                            throw new Exception("Вы ввели пустую строку");
+                        }
+                        else
+                        {
+                            Card cardForTransfer = user.GetCardForTransfer(cardNumberRec);
+
+                            user.SendMoney(userCard,cardForTransfer);
+
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    Message.ErrorMessage(e.Message);
+                }
+
                 break;
             case 2:
                 Console.WriteLine("Открыть карту");
@@ -60,7 +93,7 @@ public static class BankUserMenu
 
                                 Console.Write("Введите PIN(4 символа): ");
                                 string newPin;
-                                if (string.IsNullOrEmpty(newPin = Console.ReadLine()) || newPin.Length == 4)
+                                if (string.IsNullOrEmpty(newPin = Console.ReadLine()) || newPin.Length != 4)
                                 {
                                     throw new Exception("Некорректный PIN");
                                 }
@@ -115,10 +148,8 @@ public static class BankUserMenu
                 break;
             case 6:
                 Console.WriteLine("Мои транзакции");
-                //Todo: мои Транзакции
 
-
-                ///Выдать список карт,запрос карты у юзера, вывод тразакции по карте(общий);
+                TransactionMenu();
                 break;
 
             case 7:
@@ -208,6 +239,113 @@ public static class BankUserMenu
         }
 
         Menu();
+
+    }
+
+
+    public static void TransactionMenu() //Возможно переделать передавая выбранную карту в методы что бы по конкретной карте была стата
+    {
+        BankUser user = Common.User as BankUser;
+
+
+        Console.WriteLine("1) Показать отправленные транзакции");
+        Console.WriteLine("2) Показать последние полученные транзакции");
+        Console.WriteLine("3) Показать сумму полученых средств по каждой карте");
+        Console.WriteLine("4) Показать сумму отправленных средств по каждой карте");
+
+        Console.Write("Введите ответ: ");
+        int action = MainMenu.GetActionMenu(1, 4);
+
+        switch (action)
+        {
+            case 1:
+                {
+                    try
+                    {
+
+                        Console.WriteLine("Отправленные транзакции: ");
+                        foreach(var el in user.UserCards)
+                        {
+                            user.ShowSendedTransactionByCard(el.GetAllTransactions());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    break;
+                }
+            case 2:
+                {
+                    try
+                    {
+                        Console.WriteLine("Принятые транзакции: ");
+
+                        foreach(var el in user.UserCards)
+                        {
+                            user.ShowCompleteTransactionByCard(el.GetAllTransactions());
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    }
+                    break;
+                }
+            case 3:
+                {
+                    Console.WriteLine("Сумма полученных средств по карте");
+                    try
+                    {
+                        user.ShowAllActiveCards();
+                        Console.WriteLine("Введите номер карты: ");
+                        string cardNumber;
+                        if(string.IsNullOrEmpty(cardNumber = Console.ReadLine()))
+                        {
+                            throw new Exception("Вы ввели пустую строку");
+                        }
+                        else 
+                        {
+                            user.ShowCompleteSum(user.GetCardByNumber(cardNumber));
+                        }
+                        
+                    }
+                    catch(Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    }
+
+                    break;
+                }
+            case 4:
+                {
+
+                    Console.WriteLine("Сумма отправленных средств по карте");
+                    try
+                    {
+                        user.ShowAllActiveCards();
+                        Console.Write("Введите номер карты");
+                        string cardNumber;
+                        if(string.IsNullOrEmpty(cardNumber = Console.ReadLine()))
+                        {
+                            throw new Exception("Вы ввели пустую строку");
+                        }
+                        else
+                        { 
+                            user.ShowSendedSum(user.GetCardByNumber(cardNumber));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    }
+                    break;
+                }
+               
+        }
+
+
     }
 
    

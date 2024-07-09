@@ -25,11 +25,13 @@ namespace Bank_System
 
         public bool ComparePass(string pass) => pass == Password;
 
+        public void ChangePass(string pass) => Password = pass;
+        public void ChangeLogin(string login) => Login = login;
         
 
         
 
-        public void 
+       
 
         //public void ChangeAdminPass()
         //{
@@ -68,10 +70,7 @@ namespace Bank_System
         //}
 
 
-        public override string ToString()
-        {
-            return base.ToString();
-        }
+        
 
         
 

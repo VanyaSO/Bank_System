@@ -10,8 +10,9 @@ public class Bank
     public List<MainUser> Users = new List<MainUser>();
     
     
-    public Bank(string name, string currency, double feeSending, double feeReceipt)
+    public Bank(string name, double feeSending, double feeReceipt,List<MainUser> list)
     {
+        Users = list;
         Name = name;
         Currency = Common.ParseStringToCurrencyType(currency);
         if (feeSending < 0.0 || feeSending > 100.0)
