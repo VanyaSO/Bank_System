@@ -19,6 +19,10 @@ class Program
         //Common.Bank = new Bank("MonoBank", 2.0, 2.0);
         //Common.StartProgram();
         //Console.ReadKey();
+        Common.Bank = new Bank("MonoBank", "UAH",2.0, 2.0);
+        Common.StartProgram();
+        Common.FinishProgram();
+        Console.ReadKey();
         // MainMenu.Menu();
         // Card card = new Card("1234", CurrencyType.UAH);
         // Card card1 = new Card("1234", CurrencyType.UAH);

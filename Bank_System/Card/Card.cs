@@ -8,7 +8,6 @@ public class Card
     public decimal Balance { get; private set; }
     public CardStatus Status {  get; set; }
     private List<Transaction> _transactions = new List<Transaction>();
-    private static Random _random = new Random();
 
     public Card(string pinCode, CurrencyType currency, decimal initialBalance = 0)
     {
@@ -38,7 +37,7 @@ public class Card
 
         for (int i = 0; i < cardNumberLength; i++)
         {
-            cardNumber[i] = (char)('0' + _random.Next(0, 10));
+            cardNumber[i] = (char)('0' + Common.Random.Next(0, 10));
         }
 
         return new string(cardNumber);
@@ -106,7 +105,7 @@ public class Card
         Status = CardStatus.Blocked;
     }
     
-    public void UnblockCard() // TODO: спровайдить метод админу
+    public void UnblockCard()
     {
         Status = CardStatus.Active;
     }
@@ -116,7 +115,7 @@ public class Card
         return $"Номер карты: {CardNumber} \nПин-код: {_pinCode} \nВалюта: {Currency} \nБаланс: {Balance} \nСтатус: {Status} \n";
     }
     
-    public void Transfer(Card recipientCard, decimal amount, CurrencyType currency, string senderInitials, decimal? exchangeRate = null, string recipientName = null)
+    public void Transfer(Card recipientCard, decimal amount, string senderInitials, double feesend, double feereceipt, decimal? exchangeRate = null, string recipientName = null)
     {
         if (recipientCard == null)
         {
@@ -133,7 +132,7 @@ public class Card
             throw new InvalidOperationException("Insufficient funds.");
         }
 
-        if (Currency != currency)
+        if (this.Currency != recipientCard.Currency)
         {
             if (exchangeRate == null)
             {
@@ -141,16 +140,21 @@ public class Card
             }
 
             // TODO: пересмотреть еще раз после добавления QuerrySystem
-            // перевод денег в нужную валюту (тут decimal и спасает)
+            
             decimal exchangedAmount = amount / exchangeRate.Value;
-            recipientCard.Deposit(exchangedAmount);
+
+            decimal calcFee = (decimal)feereceipt / 100;
+            
+            recipientCard.Deposit(exchangedAmount * calcFee);
         }
         else
         {
-            recipientCard.Deposit(amount);
+            decimal calcFee = (decimal)feereceipt / 100;
+            recipientCard.Deposit(amount * calcFee);
         }
 
-        Withdraw(amount);
+        decimal calcThisFee = (decimal)feesend / 100;
+        Withdraw(amount * calcThisFee);
 
         // добавил транзакции для обеих сторон
         AddTransaction(new Transaction(

@@ -24,10 +24,7 @@ namespace Bank_System
             Password = password;
             UserRole = userRole;
         }
-
-
-
-
+        
         public static void LogIn()
         {
 
@@ -56,10 +53,6 @@ namespace Bank_System
             {
                 throw new Exception("Аккаунт с таким логином не найден");
             }
-
-            
-
-            
         }
        
         public static MainUser? EnterInAccount(string login,string pass)
