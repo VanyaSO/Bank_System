@@ -19,10 +19,7 @@ class Program
         //Common.Bank = new Bank("MonoBank", 2.0, 2.0);
         //Common.StartProgram();
         //Console.ReadKey();
-        Common.Bank = new Bank("MonoBank", "UAH",2.0, 2.0);
-        Common.StartProgram();
-        Common.FinishProgram();
-        Console.ReadKey();
+        // Common.FinishProgram();
         // MainMenu.Menu();
         // Card card = new Card("1234", CurrencyType.UAH);
         // Card card1 = new Card("1234", CurrencyType.UAH);
@@ -67,6 +64,8 @@ class Program
 
 
         List<MainUser> list = new List<MainUser?>() { adm1, user1, user2, user3 };
+        Common.Bank = new Bank("MonoBank", "UAH",2.0, 2.0, list);
+        Common.StartProgram();
 
         //Bank bank1 = new Bank("bank1",10.0f, 5.6f, list);
 
@@ -118,7 +117,7 @@ class Program
         //Console.WriteLine(adm1);
 
 
-        //MainMenu.Menu();
+        MainMenu.Menu();
 
 
         Console.ReadLine();

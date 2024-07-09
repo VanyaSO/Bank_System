@@ -70,6 +70,8 @@ public static class Query
             foreach (var currency in listCurrency)
             {
                 Common.Bank.Currencies.Add(Common.ParseStringToCurrencyType(currency.Cc), currency.Rate);
+                Console.WriteLine(currency.Cc);
+                Console.WriteLine(currency.Rate);
             }
         }
     }
