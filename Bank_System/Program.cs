@@ -16,7 +16,6 @@ class Program
         //card.SetPinCode("4321");
         //card.VerifyPinCode("3432");
         //card.VerifyPinCode("4321");
-        //Common.Bank = new Bank("MonoBank", 2.0, 2.0);
         //Common.StartProgram();
         //Console.ReadKey();
         // Common.FinishProgram();
@@ -54,7 +53,7 @@ class Program
         //{
         //    Console.WriteLine(ex.Message);
         //}
-        
+
 
         Admin adm1 = new Admin("Admin1","adm1","0000");
         
@@ -65,20 +64,22 @@ class Program
 
         List<MainUser> list = new List<MainUser?>() { adm1, user1, user2, user3 };
         Common.Bank = new Bank("MonoBank", "UAH",2.0, 2.0, list);
-        Common.StartProgram();
+        //Common.StartProgram();
 
-        //Bank bank1 = new Bank("bank1",10.0f, 5.6f, list);
+        //Common.Bank = new Bank("MonoBank", 2.0, 2.0,list);
 
-        //Common.Bank = bank1;
-        //try
-        //{
-        //    MainMenu.Menu();
+        //Bank bank1 = new Bank("bank1", 10.0f, 5.6f, list);
 
-        //}
-        //catch(Exception ex) 
-        //{ 
-        //    Message.ErrorMessage(ex.ToString());
-        //}
+        
+        try
+        {
+            MainMenu.Menu();
+
+        }
+        catch (Exception ex)
+        {
+            Message.ErrorMessage(ex.ToString());
+        }
 
         //Card card1 = new Card("1111",CurrencyType.UAH);
         //Card card2 = new Card("2222",CurrencyType.UAH);
@@ -88,16 +89,16 @@ class Program
         //Transaction trans = new Transaction(card1,1000,card2,"User1");
 
 
-        
-        
 
 
 
 
 
-        
 
-        
+
+
+
+
 
         //try
         //{

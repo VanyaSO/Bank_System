@@ -41,6 +41,7 @@ public static class BankUserMenu
                     else
                     {
                         Card userCard = user.GetCardByNumber(cardNumber);
+                        Console.Write("Введите номер карты на которую надо отправить: ");
                         string cardNumberRec;
                         if(string.IsNullOrEmpty(cardNumberRec = Console.ReadLine()))
                         {

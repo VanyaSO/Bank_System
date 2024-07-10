@@ -106,7 +106,7 @@ namespace Bank_System
 
         public override string ToString()
         {
-            return $"Имя: {Name}\nЛогин: {Login}\nПароль: {Password}";
+            return $"Имя: {Name}\nЛогин: {Login}";
         }
     }
 }
