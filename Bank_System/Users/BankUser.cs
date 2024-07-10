@@ -524,10 +524,10 @@ namespace Bank_System
 
 
         
+        //Статистика пользователя
 
 
-
-        public double GetSumSendCommision()
+        private double GetSumSendCommision()
         {
             double resultSum = 0;
 
@@ -548,7 +548,7 @@ namespace Bank_System
         }
 
 
-        public double GetSumCompleteComision()
+        private double GetSumCompleteComision()
         {
             double resultSum = 0;
 
@@ -568,7 +568,7 @@ namespace Bank_System
 
 
         
-        public double ShowSumOfComisionByUser()
+        public double GetSumOfComisionByUser()
         {
             double sendComission = GetSumSendCommision();
 
