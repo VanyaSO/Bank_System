@@ -141,11 +141,13 @@ public class Card
 
             // TODO: пересмотреть еще раз после добавления QuerrySystem
             
-            decimal exchangedAmount = amount / exchangeRate.Value;
+            decimal exchangedAmount = amount * exchangeRate.Value;
 
             decimal calcFee = (decimal)feereceipt / 100;
             
-            recipientCard.Deposit(exchangedAmount * calcFee);
+            if (calcFee != 0)
+                recipientCard.Deposit(exchangedAmount * calcFee);
+            recipientCard.Deposit(exchangedAmount);
         }
         else
         {
@@ -154,7 +156,10 @@ public class Card
         }
 
         decimal calcThisFee = (decimal)feesend / 100;
-        Withdraw(amount * calcThisFee);
+        if (calcThisFee != 0)
+            Withdraw(amount - amount * calcThisFee);
+        Withdraw(amount);
+        
 
         // добавил транзакции для обеих сторон
         AddTransaction(new Transaction(
