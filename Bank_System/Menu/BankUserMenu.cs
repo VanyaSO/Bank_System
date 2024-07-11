@@ -145,7 +145,10 @@ public static class BankUserMenu
                 break;
             case 5:
                 Console.WriteLine("Курс валют");
-                //Todo: Курс валют
+                foreach (var el in Common.Bank.Currencies)
+                {
+                    Console.WriteLine($"[{el.Key}]: {el.Value}");
+                }
                 break;
             case 6:
                 Console.WriteLine("Мои транзакции");
