@@ -88,11 +88,13 @@ class Program
         //Transaction trans = new Transaction(card1,1000,card2,"User1");
 
 
+
+
+        Card card = new Card("1324", CurrencyType.USD, 20);
+        Card card2 = new Card("1324", CurrencyType.UAH, 0);
         
-
-
         
-
+        card.Transfer(card2, 4, "ProstoChel", 5, 0, 40);
         
 
         //try
