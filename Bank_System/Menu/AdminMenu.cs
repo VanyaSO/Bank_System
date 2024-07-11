@@ -1,9 +1,11 @@
 namespace Bank_System;
 
-public static class AminMenu
+public static class AdminMenu
 {
     public static void Menu()
     {
+        Admin? admin = Common.User as Admin;
+
         Console.WriteLine("Меню администратора");
         Console.WriteLine("1) Изменить логин");
         Console.WriteLine("2) Изменить пароль");
@@ -18,10 +20,65 @@ public static class AminMenu
             case 1:
                 Console.WriteLine("Изменить логин");
                 //Todo: Изменить логин админ
+                Console.WriteLine($"Текущий логин: {admin.Login}");
+                try
+                {
+
+                    Console.Write("Введите новый логин: ");
+                    string? newLogin;
+                    if(string.IsNullOrEmpty(newLogin = Console.ReadLine()))
+                    {
+                        throw new Exception("Вы ввели пустую строку");
+                    }
+                    else
+                    {
+                        admin.ChangeLogin(newLogin);
+                        Message.SuccessMessage("Логин успешно изменен");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Message.ErrorMessage(ex.Message);
+                }
                 break;
             case 2:
                 Console.WriteLine("Изменить пароль");
-                //Todo: Изменить пароль админ
+                try
+                {
+                    Console.Write("Введите текущий пароль: ");
+                    string compPass;
+                    if (string.IsNullOrEmpty(compPass = Console.ReadLine()))
+                    {
+                        throw new Exception("Вы ввели пустую строку");
+                    }
+                    else
+                    {
+                        if (admin.ComparePass(compPass))
+                        {
+                            Console.Write("Введите новый пароль: ");
+                            string newPass;
+                            if(string.IsNullOrEmpty (newPass = Console.ReadLine()))
+                            {
+                                throw new Exception("Вы ввели пустую строку");
+                            }
+                            else
+                            {
+                                admin.ChangePass(newPass);
+                                Message.SuccessMessage("Пароль успешно изменен");
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Вы ввели неправильный пароль");
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Message.ErrorMessage(ex.Message);
+                }
+                
                 break;
             case 3:
                 MenuUsers();

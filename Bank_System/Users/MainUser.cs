@@ -24,10 +24,7 @@ namespace Bank_System
             Password = password;
             UserRole = userRole;
         }
-
-
-
-
+        
         public static void LogIn()
         {
 
@@ -56,15 +53,11 @@ namespace Bank_System
             {
                 throw new Exception("Аккаунт с таким логином не найден");
             }
-
-            
-
-            
         }
        
         public static MainUser? EnterInAccount(string login,string pass)
         {
-            foreach(var user in Common.CurrentBank.Users) //из пользователей банка который выберет
+            foreach(var user in Common.Bank.Users) //из пользователей банка который выберет
             {
                 if (user.Login == login)
                 {
@@ -101,7 +94,7 @@ namespace Bank_System
 
         private static bool IsRegistered(string login) 
         {
-            foreach(var el in Common.CurrentBank.Users)
+            foreach(var el in Common.Bank.Users)
             {
                 if(el.Login == login)
                 {

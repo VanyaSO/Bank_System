@@ -37,11 +37,19 @@ public static class MainMenu
                 {
 
                     MainUser.LogIn();
-                    //Console.WriteLine(Common.User);//Удалить,для теста
-                    if (Common.User != null)
+                  
+                    if (Common.User.UserRole == Role.BankUser)
                     {
-                        Message.SuccessMessage("Вход выполнен успешно");
-                        //PersonMenu.Menu(); 
+                        Message.SuccessMessage("Вход в аккаунт выполнен успешно");
+                        Message.SuccessMessage($"Добро пожаловать {Common.User.Name}");
+                        BankUserMenu.Menu();
+
+                    }
+                    else if(Common.User.UserRole == Role.Admin)
+                    {
+                        Message.SuccessMessage("Вы вошли в аккаунт администратора");
+                        AdminMenu.Menu();
+                        
                     }
 
                 }
@@ -66,7 +74,7 @@ public static class MainMenu
                     }
                 }
 
-                //user = MainUser.LogIn();//TODO: добавит list всех юзеров
+                
 
                 break;
             case 2:
@@ -78,12 +86,16 @@ public static class MainMenu
 
        
 
-                //Console.WriteLine(user);
+                
                 
                 break;
             case 0:
                 return;
         }
+
+
+        //Проверка на роль
+        
         
         Menu();
     }

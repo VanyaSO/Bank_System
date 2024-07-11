@@ -19,57 +19,58 @@ namespace Bank_System
         {
             foreach(var user in users)
             {
-
                 Console.WriteLine(user); //TODO: изменить ToString();
             }
         }
 
+        public bool ComparePass(string pass) => pass == Password;
 
-        public void ChangeAdminPass()
-        {
-            string? answ;
-            Console.WriteLine("Введите текущий пароль: ");
-            if(string.IsNullOrEmpty(answ = Console.ReadLine())){
-                throw new Exception("Вы ввели пустую строку");
-            }
-            else
-            {
-                if (ComparePass(answ))
-                {
-                    ChangePass();
-                }
-                else
-                {
-                    throw new Exception("Некорректный пароль");
-                }
-            }
+        public void ChangePass(string pass) => Password = pass;
+        public void ChangeLogin(string login) => Login = login;
+        
 
-        }
+        
 
        
-        private void ChangePass()
-        {
-            Console.Write("Введите новый пароль: ");
-            string? newPass;
-            if (string.IsNullOrEmpty(newPass = Console.ReadLine()))
-            {
-                throw new Exception("Вы ввели пустую строку");
-            }
-            else
-            {
-                Password = newPass;
-            }
-        }
 
-        private bool ComparePass(string pass)
-        {
-            return pass == Password;
-        }
+        //public void ChangeAdminPass()
+        //{
+        //    string? answ;
+        //    Console.WriteLine("Введите текущий пароль: ");
+        //    if(string.IsNullOrEmpty(answ = Console.ReadLine())){
+        //        throw new Exception("Вы ввели пустую строку");
+        //    }
+        //    else
+        //    {
+        //        if (ComparePass(answ))
+        //        {
+        //            ChangePass();
+        //        }
+        //        else
+        //        {
+        //            throw new Exception("Некорректный пароль");
+        //        }
+        //    }
 
-        public override string ToString()
-        {
-            return base.ToString();
-        }
+        //}
+
+       
+        //private void ChangePass()
+        //{
+        //    Console.Write("Введите новый пароль: ");
+        //    string? newPass;
+        //    if (string.IsNullOrEmpty(newPass = Console.ReadLine()))
+        //    {
+        //        throw new Exception("Вы ввели пустую строку");
+        //    }
+        //    else
+        //    {
+        //        Password = newPass;
+        //    }
+        //}
+
+
+        
 
         
 
