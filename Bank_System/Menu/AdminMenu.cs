@@ -183,6 +183,7 @@ public static class AdminMenu
             Console.WriteLine("0) Выйти");
 
             int action = MainMenu.GetActionMenu(2);
+            int fileAction;
             switch (action)
             {
                 case 1:
@@ -205,7 +206,7 @@ public static class AdminMenu
 
                     Console.Write("Желаете загрузить файл?: \n1) Да \n2) Нет");
 
-                    int fileAction = MainMenu.GetActionMenu(2);
+                    fileAction = MainMenu.GetActionMenu(2);
                     try
                     {
                         switch(fileAction)
@@ -242,7 +243,7 @@ public static class AdminMenu
 
                     Console.Write("Желаете загрузить файл?: \n1) Да \n2) Нет");
 
-                    int fileAction = MainMenu.GetActionMenu(2);
+                    fileAction = MainMenu.GetActionMenu(2);
                     try
                     {
                         switch (fileAction)

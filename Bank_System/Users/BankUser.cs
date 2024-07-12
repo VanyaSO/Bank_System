@@ -267,7 +267,7 @@ namespace Bank_System
 
 
 
-            Console.WriteLine();
+            Console.WriteLine("Введите сумму для перевода: ");
             string sumForSend;
             if (string.IsNullOrEmpty(sumForSend = Console.ReadLine()))
             {
