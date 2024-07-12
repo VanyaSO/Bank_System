@@ -101,7 +101,7 @@ public static class FileSystem
             bw.Write(card.Currency.ToString());
             bw.Write(card.Balance);
             bw.Write(card.Status.ToString());
-            // SaveCardTransactions(bw, card.GetAllTransactions());
+            SaveCardTransactions(bw, card.GetAllTransactions());
         }
     }
 
@@ -117,22 +117,64 @@ public static class FileSystem
             CurrencyType currency = br.ReadString().ParseToCurrencyType();
             decimal balance = br.ReadDecimal();
             CardStatus status = br.ReadString().ParseToCardStatus();
+            List<Transaction> transactions = LoadCardTransactions(br);
             
-            cards.Add(new Card(cardNumber, pinCode, currency, balance, status));
+            cards.Add(new Card(cardNumber, pinCode, currency, balance, status, transactions));
         }
         return cards;
     }
 
-    // public static void SaveCardTransactions(BinaryWriter bw, List<Transaction> transactions)
-    // {
-    //     bw.Write(transactions.Count);
-    //     foreach (var trans in transactions)
-    //     {
-    //         bw.Write(trans.TransactionTime.ToString());
-    //         bw.Write(trans.Amount);
-    //         
-    //     }
-    // }
+    private static void SaveCardTransactions(BinaryWriter bw, List<Transaction> transactions)
+    {
+        bw.Write(transactions.Count);
+        foreach (var trans in transactions)
+        {
+            bw.Write(trans.SenderCard.CardNumber);
+            bw.Write(trans.SenderCard.Currency.ToString());
+            bw.Write(trans.Amount);
+            bw.Write(trans.RecipientCard.CardNumber);
+            bw.Write(trans.RecipientCard.Currency.ToString());
+            bw.Write(trans.TransactionTime.ToString());
+            bw.Write(trans.RecipientName);
+            if (trans.ExchangeRate.HasValue)
+            {
+                bw.Write(true);
+                bw.Write(trans.ExchangeRate.Value);
+            }
+            else
+                bw.Write(false);
+            bw.Write(trans.SenderInitials);
+        }
+    }
+    
+    private static List<Transaction> LoadCardTransactions(BinaryReader br)
+    {
+        int countTransactions = br.ReadInt32();
+        List<Transaction> transactions = new List<Transaction>();
+        
+        for (int i = 0; i < countTransactions; i++)
+        {
+            TransactionCardInfo senderCard =
+                new TransactionCardInfo(br.ReadString(), br.ReadString().ParseToCurrencyType());
+            decimal amount = br.ReadDecimal();
+            TransactionCardInfo RecipientCard =
+                new TransactionCardInfo(br.ReadString(), br.ReadString().ParseToCurrencyType());
+            DateTime date = DateTime.Parse(br.ReadString());
+            string recipientName = br.ReadString();
+            decimal? exchangeRate;
+
+            if (br.ReadBoolean())
+                exchangeRate = br.ReadDecimal();
+            else
+                exchangeRate = null;
+            
+            string senderInitials = br.ReadString();
+            
+            transactions.Add(new Transaction(senderCard, amount, RecipientCard, date, senderInitials, exchangeRate, recipientName));
+        }
+
+        return transactions;
+    }
 
     public static void SaveStatisticEarnCommissionsToTxt(MainUser user)
     {

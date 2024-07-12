@@ -7,7 +7,7 @@ public class Card
     public CurrencyType Currency { get; }
     public decimal Balance { get; private set; }
     public CardStatus Status {  get; set; }
-    public List<Transaction> _transactions = new List<Transaction>();
+    private List<Transaction> _transactions = new List<Transaction>();
 
     public Card(string pinCode, CurrencyType currency, decimal initialBalance = 0)
     {
@@ -18,13 +18,14 @@ public class Card
         Balance = initialBalance;
     }
 
-    public Card(string cardNumber, string pinCode, CurrencyType currency, decimal balance, CardStatus status)
+    public Card(string cardNumber, string pinCode, CurrencyType currency, decimal balance, CardStatus status, List<Transaction> transactions)
     {
         CardNumber = cardNumber;
         PinCode = pinCode;
         Currency = currency;
         Balance = balance;
         Status = status;
+        _transactions = transactions;
     }
 
 
