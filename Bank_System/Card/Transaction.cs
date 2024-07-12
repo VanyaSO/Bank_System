@@ -6,11 +6,11 @@ public class Transaction
     public decimal Amount { get; }
     public TransactionCardInfo SenderCard { get; }
     public TransactionCardInfo RecipientCard { get; }
-    public string RecipientName { get; }
+    public string? RecipientName { get; }
     public decimal? ExchangeRate { get; } // курс обмена валют (если перевод на краты разных валют)
     public string SenderInitials { get; } // наши инициалы
 
-    public Transaction(Card senderCard, decimal amount, Card recipientCard, string senderInitials, decimal? exchangeRate = null, string recipientName = null)
+    public Transaction(Card senderCard, decimal amount, Card recipientCard, string senderInitials, decimal? exchangeRate = null, string? recipientName = null)
     {
         if (string.IsNullOrWhiteSpace(senderInitials)) throw new ArgumentException("Sender initials are required.", nameof(senderInitials));
 
