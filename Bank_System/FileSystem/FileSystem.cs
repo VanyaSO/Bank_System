@@ -135,7 +135,14 @@ public static class FileSystem
             bw.Write(trans.RecipientCard.CardNumber);
             bw.Write(trans.RecipientCard.Currency.ToString());
             bw.Write(trans.TransactionTime.ToString());
-            bw.Write(trans.RecipientName);
+            if (trans.RecipientName != null)
+            {
+                bw.Write(true);
+                bw.Write(trans.RecipientName);
+            }
+            else
+                bw.Write(false);
+            
             if (trans.ExchangeRate.HasValue)
             {
                 bw.Write(true);
@@ -160,7 +167,13 @@ public static class FileSystem
             TransactionCardInfo RecipientCard =
                 new TransactionCardInfo(br.ReadString(), br.ReadString().ParseToCurrencyType());
             DateTime date = DateTime.Parse(br.ReadString());
-            string recipientName = br.ReadString();
+            string recipientName;
+            
+            if (br.ReadBoolean())
+                recipientName = br.ReadString();
+            else
+                recipientName = null;
+            
             decimal? exchangeRate;
 
             if (br.ReadBoolean())
