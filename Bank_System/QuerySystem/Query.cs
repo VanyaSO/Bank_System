@@ -56,7 +56,7 @@ public static class Query
             // сохраняем все курсы валют
             foreach (var currency in listCurrency)
             {
-                Common.Bank.Currencies.Add(Common.ParseStrToCurrencyType(currency.Cc), currency.Rate);
+                Common.Bank.Currencies.Add(currency.Cc.ParseToCurrencyType(), currency.Rate);
             }
         }
     }
