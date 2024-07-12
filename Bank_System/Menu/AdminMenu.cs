@@ -37,11 +37,7 @@ public static class AdminMenu
                     {
                         admin.ChangeLogin(newLogin);
                         Message.SuccessMessage("Логин успешно изменен");
-<<<<<<< Updated upstream
-                         
-=======
-                        
->>>>>>> Stashed changes
+
                     }
                 }
                 catch (Exception ex)
