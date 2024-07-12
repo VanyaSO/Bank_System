@@ -8,9 +8,8 @@ public static class BankUserMenu
 
     public static void Menu()
     {
-        //Thread.Sleep(1500);
-        //Console.Clear();
-        
+
+
         BankUser? user = Common.User as BankUser;
 
 
@@ -55,7 +54,7 @@ public static class BankUserMenu
                             Card cardForTransfer = user.GetCardForTransfer(cardNumberRec);
 
                             user.SendMoney(userCard, cardForTransfer);
-                            //Thread.Sleep(1000);
+                            
 
                         }
                     }
@@ -106,7 +105,7 @@ public static class BankUserMenu
                                 {
                                     user.OpenNewCard(newPin, currency);
                                     Message.SuccessMessage("Карта успешно открыта");
-                                    Thread.Sleep(1000);
+                                    
 
                                 }
                             }
@@ -143,7 +142,7 @@ public static class BankUserMenu
                     Console.Write("Введите номер карты котрую хотите заблокировать: ");
                     string cardNumber = Console.ReadLine();
                     user.BlockCard(cardNumber);
-                    Thread.Sleep(1000);
+                    
 
                 }
                 catch(Exception ex)
@@ -197,7 +196,7 @@ public static class BankUserMenu
                             {
                                 user.ChangePassword(newPass);
                                 Message.SuccessMessage("Пароль успешно изменен");
-                                Thread.Sleep(1000);
+                                
                             }
                         }
                         else
@@ -240,7 +239,7 @@ public static class BankUserMenu
 
                                 user.ChangePassword(newNumber);
                                 Message.SuccessMessage("Номер телефона успешно изменен");
-                                Thread.Sleep(1000);
+                                
                             }
                         }
                         else
@@ -264,7 +263,7 @@ public static class BankUserMenu
 
     }
 
-
+    //9404852673069157
     public static void TransactionMenu() //Возможно переделать передавая выбранную карту в методы что бы по конкретной карте была стата
     {
         Console.Clear();
