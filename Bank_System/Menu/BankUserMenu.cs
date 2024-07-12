@@ -147,10 +147,12 @@ public static class BankUserMenu
                 Console.WriteLine("Курс валют");
                 foreach (var el in Common.Bank.Currencies)
                 {
-                    if(el.Key.ToString() != "UAH")
-                    {
-                        Console.WriteLine($"[{el.Key}]: {el.Value}");   
-                    }
+
+                   
+                    Console.WriteLine($"[{el.Key}]: {el.Value}");   
+
+                    
+
                 }
                 break;
             case 6:

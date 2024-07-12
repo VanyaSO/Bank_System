@@ -264,7 +264,11 @@ namespace Bank_System
 
         public void SendMoney(Card card,Card cardForTranf)
         {
-            Console.WriteLine();
+
+
+
+
+            Console.WriteLine("Введите сумму для перевода: ");
             string sumForSend;
             if (string.IsNullOrEmpty(sumForSend = Console.ReadLine()))
             {
