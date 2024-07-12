@@ -45,10 +45,6 @@ public static class Common
         return action;
     }
 
-    public static CurrencyType ParseStrToCurrencyType(string str) => (CurrencyType)Enum.Parse(typeof(CurrencyType), str);
-    public static Role ParseStrToRoleType(string str) => (Role)Enum.Parse(typeof(Role), str);
-    public static CardStatus ParseStrToCardStatus(string str) => (CardStatus)Enum.Parse(typeof(CardStatus), str);
-
     // чтобы были дефолтные данные если нету файлов
     public static void DefaultData()
     {

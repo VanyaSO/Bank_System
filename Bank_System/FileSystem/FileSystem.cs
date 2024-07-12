@@ -23,7 +23,7 @@ public static class FileSystem
             using (BinaryReader br = new BinaryReader(fs))
             {
                 string name = br.ReadString();
-                CurrencyType currency = Common.ParseStrToCurrencyType(br.ReadString());
+                CurrencyType currency = br.ReadString().ParseToCurrencyType();
                 double feeSending = br.ReadDouble();
                 double feeReceipt = br.ReadDouble();
 
@@ -73,7 +73,7 @@ public static class FileSystem
 
                 
                     // догружаем данные если это обычный пользователь банка
-                    if (Common.ParseStrToRoleType(role) == Role.BankUser)
+                    if (role.ParseToRoleType() == Role.BankUser)
                     {
                         string phoneNumber = br.ReadString();                        
                         DateOnly bDate = DateOnly.Parse(br.ReadString());
@@ -114,9 +114,9 @@ public static class FileSystem
         {
             string cardNumber = br.ReadString();
             string pinCode = br.ReadString();
-            CurrencyType currency = Common.ParseStrToCurrencyType(br.ReadString());
+            CurrencyType currency = br.ReadString().ParseToCurrencyType();
             decimal balance = br.ReadDecimal();
-            CardStatus status = Common.ParseStrToCardStatus(br.ReadString());
+            CardStatus status = br.ReadString().ParseToCardStatus();
             
             cards.Add(new Card(cardNumber, pinCode, currency, balance, status));
         }
