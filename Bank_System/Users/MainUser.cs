@@ -13,7 +13,9 @@ namespace Bank_System
         public string Name { get; set; } //не меняется 
         public string Login { get; set; } //не меняется
         public string Password { get; set; }
+
         public Role UserRole { get; set; }
+
 
         public MainUser() { }
         public MainUser(string name,string login, string password, Role userRole)
@@ -26,35 +28,48 @@ namespace Bank_System
         
         public static void LogIn()
         {
-
-            string pass, login;
-            Console.Write("Введите логин: ");
-            if(string.IsNullOrEmpty(login = Console.ReadLine()))
+            try
             {
-                throw new Exception("Пустое поле логина");
-            }
 
-            if (IsRegistered(login))
-            {
+                string pass, login;
+                Console.Write("Введите логин: ");
+                if(string.IsNullOrEmpty(login = Console.ReadLine()))
+                {
+                    throw new Exception("Пустое поле логина");
+                }
+
+                if (IsRegistered(login))
+                {
             
-                Console.Write("Введите пароль: ");
-                if(string.IsNullOrEmpty(pass = Console.ReadLine()))
-                {
-                    throw new Exception("Пустое поле пароля");
+
+                    Console.Write("Введите пароль: ");
+                    if(string.IsNullOrEmpty(pass = Console.ReadLine()))
+                    {
+                        throw new Exception("Пустое поле пароля");
+                    }
+                    try
+                    {
+                        Common.User = EnterInAccount(login, pass);
+
+                    }
+                    catch(Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    }
+
+                
+
                 }
-                try
+                else
                 {
-                    Common.User = EnterInAccount(login, pass);
+                    throw new Exception("Аккаунт с таким логином не найден");
                 }
-                catch(Exception ex)
-                {
-                    Message.ErrorMessage(ex.Message);
-                }
+
             }
-            else
-            {
-                throw new Exception("Аккаунт с таким логином не найден");
+            catch (Exception ex) {
+                Message.ErrorMessage (ex.Message); 
             }
+
         }
        
         public static MainUser? EnterInAccount(string login,string pass)

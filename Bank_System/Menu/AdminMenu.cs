@@ -83,6 +83,7 @@ public static class AdminMenu
                 
                 break;
             case 3:
+                Console.WriteLine("Пользователи");
                 MenuUsers();
                 break;
             case 4:
@@ -98,23 +99,26 @@ public static class AdminMenu
 
     public static void MenuUsers()
     {
-        ShowAllUsers();
+
         
-        // -----Вынестив в отельный метод для поиска пользователя ----- //
+        Bank.ShowAllUsers();
+
+       
+        
+        
         Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
         string findUserData = Console.ReadLine();
         if (findUserData.Trim().Length == 0)
             return;
 
-        BankUser user = GetUserByData(findUserData);
+        BankUser user = Bank.GetUserByData(findUserData);
+
         try
         {
 
             if(user != null)
             {
-                // Todo: ищем пользователя
-                // выводим инфу о найденом пользователе если нет запрашиваем еще раз 
-                // ----- //
+                
                 Console.WriteLine("Выбраный пользователь: ");
                 user.ShowUserInfo();
 
@@ -146,10 +150,6 @@ public static class AdminMenu
                         }
 
                         break;
-                    //case 2:
-                    //    Console.WriteLine("0) Вернуться назад");
-                        
-                    //    break;
                     case 0:
                         return;
                 }
@@ -172,56 +172,106 @@ public static class AdminMenu
     
     public static void MenuStatistic()
     {
-        // убрать это 
-        ShowAllUsers();
 
-        Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
-        string findUserData = Console.ReadLine();
-        if (findUserData.Trim().Length == 0)
-            return;
-
-        BankUser user = GetUserByData(findUserData);
         try
+        {
+            
+            
+            Console.WriteLine("Статистика");
+            Console.WriteLine("1) Заработок на комиссиях по конкретному пользователю");
+            Console.WriteLine("2) Заработок на комиссиях со всех пользователей");
+            Console.WriteLine("0) Выйти");
+
+            int action = MainMenu.GetActionMenu(2);
+            switch (action)
             {
-            if(user!= null)
-            {
-                Console.WriteLine("Статистика");
-                Console.WriteLine("1) Заработок на комиссиях по конкретному пользователю");
-                Console.WriteLine("2) Заработок на комиссиях со всех пользователей");
-                Console.WriteLine("0) Выйти");
-
-                int action = MainMenu.GetActionMenu(2);
-                switch (action)
-                {
-                    case 1:
-                        Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
-                        //Todo: Заработок на комиссиях по конкретному пользователю
-                        // убрать вот сюда
-                        double resultSum = user.GetSumOfComisionByUser();
-                        Console.WriteLine($"{user.Name}: {resultSum}");
-                        // предлагаем сохранить в текстовый файл
-                        break;
-                    case 2:
-                        Console.WriteLine("Заработок на комиссиях по всем пользователям");
+                case 1:
+                    Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
+                    //Todo: Заработок на комиссиях по конкретному пользователю
 
 
-                        foreach(MainUser mUser in Common.Bank.Users)
-                        {
-                            if (mUser.UserRole == Role.BankUser)
-                            {
-                                user.GetSumOfComisionByUser();
-                            }
-                        }
-                        //Todo: Заработок на комиссиях со всех пользователей - потом предлаем сохрнаить в текстовый файл
-                        break;
-                    case 0:
+                    Bank.ShowAllUsers();
+
+                    Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
+                    string findUserData = Console.ReadLine();
+                    if (findUserData.Trim().Length == 0)
                         return;
-                }
+
+                    BankUser user = Bank.GetUserByData(findUserData);
+
+
+                    double resultSum = user.GetSumOfComisionByUser();
+                    Console.WriteLine($"{user.Name}: {resultSum}");
+
+                    Console.Write("Желаете загрузить файл?: \n1) Да \n2) Нет");
+
+                    int fileAction = MainMenu.GetActionMenu(2);
+                    try
+                    {
+                        switch(fileAction)
+                        {
+                            case 1:
+                                {
+                                    //запись в файл
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    } 
+                        
+                    break;
+                case 2:
+                    Console.WriteLine("Заработок на комиссиях по всем пользователям");
+
+
+                    foreach(MainUser user1 in Common.Bank.Users)
+                    {
+                        if(user1.UserRole == Role.BankUser)
+                        {
+                            (user1 as BankUser).GetSumOfComisionByUser();
+
+                        }
+                    }
+
+                    Console.Write("Желаете загрузить файл?: \n1) Да \n2) Нет");
+
+                    int fileAction = MainMenu.GetActionMenu(2);
+                    try
+                    {
+                        switch (fileAction)
+                        {
+                            case 1:
+                                {
+                                    //запись в файл
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    }
+
+                    break;
+                case 0:
+                    return;
             }
-            else
-            {
-                throw new Exception("Пользователь не найден");
-            }
+          
+
+
+
+
         }
         catch (Exception ex) { 
             Message.ErrorMessage (ex.Message);
@@ -230,40 +280,5 @@ public static class AdminMenu
         MenuStatistic();
     }
 
-    //совет куда вынести методы
-    public static void ShowAllUsers() 
-    {
-        foreach(MainUser user in Common.Bank.Users)
-        {
-            if (user.UserRole == Role.BankUser)
-                (user as BankUser).ShowUserInfo();
-        }
-    }
 
-    public static BankUser GetUserByData(string findData)
-    {
-        foreach(MainUser user in Common.Bank.Users)
-        {
-            if (user.UserRole == Role.BankUser)
-                if(findData == user.Name || findData == (user as BankUser).ID)
-                    return (user as BankUser);
-        }
-
-        return null;
-    }
-
-    public static void ShowAllCommisionUsers()
-    {
-        double fullSum = 0;
-        foreach(BankUser user in Common.Bank.Users)
-        {
-            
-            double sum = user.GetSumOfComisionByUser();
-            fullSum += sum;
-            Console.WriteLine($"{user.Name}: {sum}");
-        }
-
-        Console.WriteLine($"Общая сумма заработка на комиссии: {fullSum}");
-
-    }
 }

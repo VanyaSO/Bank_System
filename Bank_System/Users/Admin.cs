@@ -29,45 +29,7 @@ namespace Bank_System
         public void ChangeLogin(string login) => Login = login;
         
         
-        
-
-       
-
-        //public void ChangeAdminPass()
-        //{
-        //    string? answ;
-        //    Console.WriteLine("Введите текущий пароль: ");
-        //    if(string.IsNullOrEmpty(answ = Console.ReadLine())){
-        //        throw new Exception("Вы ввели пустую строку");
-        //    }
-        //    else
-        //    {
-        //        if (ComparePass(answ))
-        //        {
-        //            ChangePass();
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("Некорректный пароль");
-        //        }
-        //    }
-
-        //}
-
-       
-        //private void ChangePass()
-        //{
-        //    Console.Write("Введите новый пароль: ");
-        //    string? newPass;
-        //    if (string.IsNullOrEmpty(newPass = Console.ReadLine()))
-        //    {
-        //        throw new Exception("Вы ввели пустую строку");
-        //    }
-        //    else
-        //    {
-        //        Password = newPass;
-        //    }
-        //}
+     
 
 
         
