@@ -101,9 +101,8 @@ namespace Bank_System
                 else 
                 {
                     OpenNewCard(newPin,CurrencyType.UAH);
-
+                    UserRole = Role.BankUser;
                     Common.Bank.Users.Add(this);
-                
                 }
             }
             catch (Exception ex)
@@ -273,7 +272,7 @@ namespace Bank_System
             else
             {
                 decimal resultSum = Int32.Parse(sumForSend);
-                card.Transfer(cardForTranf, resultSum,Name,Common.Bank.FeeSending,Common.Bank.FeeReceipt);
+                card.Transfer(cardForTranf, resultSum,Name,(decimal)Common.Bank.FeeSending, (decimal)Common.Bank.FeeReceipt);
                 Message.SuccessMessage("Перевод успешно выполнен");
             }
         }
@@ -530,8 +529,7 @@ namespace Bank_System
                 {
                     if(transaction.SenderInitials == Name)
                     {
-                        resultSum += Common.Bank.FeeSending;
-
+                        resultSum += (double)Common.Bank.FeeSending;
                     }
                 }
             }
@@ -550,7 +548,7 @@ namespace Bank_System
                 {
                     if(transaction.RecipientName == Name)
                     {
-                        resultSum += Common.Bank.FeeReceipt;
+                        resultSum += (double)Common.Bank.FeeReceipt;
                     }
                 }
             }

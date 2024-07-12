@@ -98,14 +98,7 @@ public static class AdminMenu
 
     public static void MenuUsers()
     {
-        // TODO: принтим всех пользователей
-        // ФИО
-        // дата рождения
-        // id
-        // номер телефона
-        // Список карт - кроме PIN
         ShowAllUsers();
-        
         
         // -----Вынестив в отельный метод для поиска пользователя ----- //
         Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
@@ -179,6 +172,7 @@ public static class AdminMenu
     
     public static void MenuStatistic()
     {
+        // убрать это 
         ShowAllUsers();
 
         Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
@@ -202,6 +196,7 @@ public static class AdminMenu
                     case 1:
                         Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
                         //Todo: Заработок на комиссиях по конкретному пользователю
+                        // убрать вот сюда
                         double resultSum = user.GetSumOfComisionByUser();
                         Console.WriteLine($"{user.Name}: {resultSum}");
                         // предлагаем сохранить в текстовый файл
@@ -210,27 +205,23 @@ public static class AdminMenu
                         Console.WriteLine("Заработок на комиссиях по всем пользователям");
 
 
-                        foreach(BankUser users in Common.Bank.Users)
+                        foreach(MainUser mUser in Common.Bank.Users)
                         {
-                            user.GetSumOfComisionByUser();
+                            if (mUser.UserRole == Role.BankUser)
+                            {
+                                user.GetSumOfComisionByUser();
+                            }
                         }
-                        // ФИО: 1031.4 UAH
-                        // ФИО: 25.4 UAH
-                        // Сума: 1031.4 + 25.4 UAH
                         //Todo: Заработок на комиссиях со всех пользователей - потом предлаем сохрнаить в текстовый файл
                         break;
                     case 0:
                         return;
                 }
-
             }
             else
             {
                 throw new Exception("Пользователь не найден");
             }
-
-
-
         }
         catch (Exception ex) { 
             Message.ErrorMessage (ex.Message);
@@ -242,27 +233,26 @@ public static class AdminMenu
     //совет куда вынести методы
     public static void ShowAllUsers() 
     {
-        foreach(BankUser user in Common.Bank.Users)
+        foreach(MainUser user in Common.Bank.Users)
         {
-            user.ShowUserInfo();
+            if (user.UserRole == Role.BankUser)
+                (user as BankUser).ShowUserInfo();
         }
     }
 
     public static BankUser GetUserByData(string findData)
     {
-        foreach(BankUser user in Common.Bank.Users)
+        foreach(MainUser user in Common.Bank.Users)
         {
-            if(findData == user.Name || findData == user.ID)
-            {
-                return user;
-            }
+            if (user.UserRole == Role.BankUser)
+                if(findData == user.Name || findData == (user as BankUser).ID)
+                    return (user as BankUser);
         }
 
         return null;
     }
 
-
-    public static void ShowAllCommision()
+    public static void ShowAllCommisionUsers()
     {
         double fullSum = 0;
         foreach(BankUser user in Common.Bank.Users)
