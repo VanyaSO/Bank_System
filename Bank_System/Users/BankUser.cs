@@ -15,19 +15,15 @@ namespace Bank_System
 {
     public class BankUser : MainUser
     {
-
-
-        private readonly DateOnly BDate; // не меняется 
+        public readonly DateOnly BDate; // не меняется 
         public string PhoneNumber { get; set; } // меняетя 
-        public string ID { get; set; } // не меняется 
-
+        public string ID { get; set; } 
         public List<Card> UserCards { get; set; }
 
 
         public BankUser() : base() { UserCards = new List<Card>() {}; }
         public BankUser(string name, string login, string pass, string phoneNumb, string id, DateOnly date,List<Card> userCards) : base(name,login, pass,Role.BankUser)
         {
-            
             BDate = date;
             PhoneNumber = phoneNumb;
             ID = id;
@@ -107,7 +103,6 @@ namespace Bank_System
                     OpenNewCard(newPin,CurrencyType.UAH);
                     UserRole = Role.BankUser;
                     Common.Bank.Users.Add(this);
-                
                 }
             }
             catch (Exception ex)
@@ -116,11 +111,7 @@ namespace Bank_System
             }
         }
 
-        private string CreateNewId()
-        {
-            Random rand = new Random();
-            return Convert.ToString(rand.Next(1000,9999));
-        }
+        private string CreateNewId() => Convert.ToString(Common.Random.Next(1000,9999));
 
      
 
@@ -281,7 +272,7 @@ namespace Bank_System
             else
             {
                 decimal resultSum = Int32.Parse(sumForSend);
-                card.Transfer(cardForTranf, resultSum,Name,Common.Bank.FeeSending,Common.Bank.FeeReceipt);
+                card.Transfer(cardForTranf, resultSum,Name,(decimal)Common.Bank.FeeSending, (decimal)Common.Bank.FeeReceipt);
                 Message.SuccessMessage("Перевод успешно выполнен");
             }
         }
@@ -538,8 +529,7 @@ namespace Bank_System
                 {
                     if(transaction.SenderInitials == Name)
                     {
-                        resultSum += Common.Bank.FeeSending;
-
+                        resultSum += (double)Common.Bank.FeeSending;
                     }
                 }
             }
@@ -558,7 +548,7 @@ namespace Bank_System
                 {
                     if(transaction.RecipientName == Name)
                     {
-                        resultSum += Common.Bank.FeeReceipt;
+                        resultSum += (double)Common.Bank.FeeReceipt;
                     }
                 }
             }

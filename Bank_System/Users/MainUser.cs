@@ -14,7 +14,8 @@ namespace Bank_System
         public string Login { get; set; } //не меняется
         public string Password { get; set; }
 
-        public Role UserRole { get;  set; }
+        public Role UserRole { get; set; }
+
 
         public MainUser() { }
         public MainUser(string name,string login, string password, Role userRole)
@@ -40,6 +41,7 @@ namespace Bank_System
                 if (IsRegistered(login))
                 {
             
+
                     Console.Write("Введите пароль: ");
                     if(string.IsNullOrEmpty(pass = Console.ReadLine()))
                     {
@@ -62,6 +64,7 @@ namespace Bank_System
                 {
                     throw new Exception("Аккаунт с таким логином не найден");
                 }
+
             }
             catch (Exception ex) {
                 Message.ErrorMessage (ex.Message); 
@@ -71,7 +74,7 @@ namespace Bank_System
        
         public static MainUser? EnterInAccount(string login,string pass)
         {
-            foreach(var user in Common.Bank.Users) //из пользователей банка который выберет
+            foreach(MainUser user in Common.Bank.Users) //из пользователей банка который выберет
             {
                 if (user.Login == login)
                 {

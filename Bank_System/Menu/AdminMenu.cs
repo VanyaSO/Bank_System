@@ -98,14 +98,11 @@ public static class AdminMenu
 
     public static void MenuUsers()
     {
-        // TODO: принтим всех пользователей
-        // ФИО
-        // дата рождения
-        // id
-        // номер телефона
-        // Список карт - кроме PIN
-        Bank.ShowAllUsers();
+
         
+        Bank.ShowAllUsers();
+
+       
         
         // -----Вынестив в отельный метод для поиска пользователя ----- //
         Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
@@ -179,9 +176,7 @@ public static class AdminMenu
     
     public static void MenuStatistic()
     {
-        
 
-        //BankUser user = GetUserByData(findUserData);
         try
         {
             
@@ -197,6 +192,7 @@ public static class AdminMenu
                 case 1:
                     Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
                     //Todo: Заработок на комиссиях по конкретному пользователю
+
 
                     Bank.ShowAllUsers();
 
@@ -233,6 +229,7 @@ public static class AdminMenu
 
 
 
+
         }
         catch (Exception ex) { 
             Message.ErrorMessage (ex.Message);
@@ -241,5 +238,5 @@ public static class AdminMenu
         MenuStatistic();
     }
 
-    
+
 }
