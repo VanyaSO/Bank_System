@@ -32,17 +32,23 @@ public class Bank
             if (user.UserRole == Role.BankUser)
             {
                 (user as BankUser).ShowUserInfo();
+                Console.WriteLine();
             }
         }
     }
 
+ 
+
     public static BankUser GetUserByData(string findData)
     {
-        foreach (BankUser user in Common.Bank.Users)
+        foreach (var user in Common.Bank.Users)
         {
-            if (findData == user.Name || findData == user.ID)
+            if (user is BankUser bankUser && bankUser.UserRole == Role.BankUser)
             {
-                return user;
+                if (findData == bankUser.Name || findData == bankUser.ID)
+                {
+                    return bankUser;
+                }
             }
         }
 
@@ -55,10 +61,13 @@ public class Bank
         double fullSum = 0;
         foreach (BankUser user in Common.Bank.Users)
         {
+            if(user is BankUser bankUser)
+            {
+                double sum = user.GetSumOfComisionByUser();
+                fullSum += sum;
+                Console.WriteLine($"{user.Name}: {sum}");
 
-            double sum = user.GetSumOfComisionByUser();
-            fullSum += sum;
-            Console.WriteLine($"{user.Name}: {sum}");
+            }
         }
 
         Console.WriteLine($"Общая сумма заработка на комиссии: {fullSum}");

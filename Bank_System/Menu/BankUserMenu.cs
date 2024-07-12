@@ -8,7 +8,9 @@ public static class BankUserMenu
 
     public static void Menu()
     {
-
+        //Thread.Sleep(1500);
+        //Console.Clear();
+        
         BankUser? user = Common.User as BankUser;
 
 
@@ -37,6 +39,7 @@ public static class BankUserMenu
                     if(string.IsNullOrEmpty(cardNumber = Console.ReadLine()))
                     {
                         throw new Exception("Вы ввели пустую строку");
+                        
                     }
                     else
                     {
@@ -52,6 +55,7 @@ public static class BankUserMenu
                             Card cardForTransfer = user.GetCardForTransfer(cardNumberRec);
 
                             user.SendMoney(userCard, cardForTransfer);
+                            //Thread.Sleep(1000);
 
                         }
                     }
@@ -101,6 +105,8 @@ public static class BankUserMenu
                                 else
                                 {
                                     user.OpenNewCard(newPin, currency);
+                                    Message.SuccessMessage("Карта успешно открыта");
+                                    Thread.Sleep(1000);
 
                                 }
                             }
@@ -123,6 +129,7 @@ public static class BankUserMenu
                 Console.WriteLine("Информация по моим картам");
                 //Todo: Информация о картах
                 user.ShowAllCards();
+                Thread.Sleep(2000);
                 break;
             case 4:
                 //Todo: Заблокировать карту
@@ -136,6 +143,7 @@ public static class BankUserMenu
                     Console.Write("Введите номер карты котрую хотите заблокировать: ");
                     string cardNumber = Console.ReadLine();
                     user.BlockCard(cardNumber);
+                    Thread.Sleep(1000);
 
                 }
                 catch(Exception ex)
@@ -147,9 +155,12 @@ public static class BankUserMenu
                 Console.WriteLine("Курс валют");
                 foreach (var el in Common.Bank.Currencies)
                 {
+                    if(el.Key != CurrencyType.UAH)
+                    {
+                        Console.WriteLine($"[{el.Key}]: {el.Value}");   
 
+                    }
                    
-                    Console.WriteLine($"[{el.Key}]: {el.Value}");   
 
                     
 
@@ -186,6 +197,7 @@ public static class BankUserMenu
                             {
                                 user.ChangePassword(newPass);
                                 Message.SuccessMessage("Пароль успешно изменен");
+                                Thread.Sleep(1000);
                             }
                         }
                         else
@@ -228,6 +240,7 @@ public static class BankUserMenu
 
                                 user.ChangePassword(newNumber);
                                 Message.SuccessMessage("Номер телефона успешно изменен");
+                                Thread.Sleep(1000);
                             }
                         }
                         else
@@ -254,16 +267,17 @@ public static class BankUserMenu
 
     public static void TransactionMenu() //Возможно переделать передавая выбранную карту в методы что бы по конкретной карте была стата
     {
+        Console.Clear();
         BankUser user = Common.User as BankUser;
 
-
+        Console.WriteLine("5) Показать все транзакции");
         Console.WriteLine("1) Показать отправленные транзакции");
         Console.WriteLine("2) Показать последние полученные транзакции");
         Console.WriteLine("3) Показать сумму полученых средств по каждой карте");
         Console.WriteLine("4) Показать сумму отправленных средств по каждой карте");
 
         Console.Write("Введите ответ: ");
-        int action = MainMenu.GetActionMenu(1, 4);
+        int action = MainMenu.GetActionMenu(5);
 
         switch (action)
         {
@@ -273,7 +287,7 @@ public static class BankUserMenu
                     {
 
                         Console.WriteLine("Отправленные транзакции: ");
-                        foreach(var el in user.UserCards)
+                        foreach(Card el in user.UserCards)
                         {
                             user.ShowSendedTransactionByCard(el.GetAllTransactions());
                         }
@@ -351,6 +365,20 @@ public static class BankUserMenu
                     }
                     break;
                 }
+            case 5:
+                {
+                    Console.WriteLine("Все транзакции");//
+                    foreach(var card in user.UserCards)
+                    {
+                        foreach(Transaction trans in card.GetAllTransactions())
+                        {
+                            trans.DisplayTransactionDetails();
+                        }
+                    }
+                    break;
+                }
+            default:
+                break;
                
         }
 

@@ -161,9 +161,9 @@ public class Card
         else
             Withdraw(amount);
         
-
+        
         // добавил транзакции для обеих сторон
-        AddTransaction(new Transaction(
+        _transactions.Add(new Transaction(
             senderCard: this,
             amount: amount,
             recipientCard: recipientCard,
@@ -171,7 +171,7 @@ public class Card
             exchangeRate: (decimal)Common.Bank.Currencies[this.Currency] / (decimal)Common.Bank.Currencies[recipientCard.Currency]
         ));
 
-        recipientCard.AddTransaction(new Transaction(
+        recipientCard._transactions.Add(new Transaction(
             senderCard: recipientCard,
             amount: amount,
             recipientCard: this,
@@ -182,7 +182,10 @@ public class Card
 
     private void AddTransaction(Transaction transaction)
     {
+        Console.WriteLine("ДОБАВИЛИ ТРАНЗАКЦИЮ");
+        transaction.DisplayTransactionDetails();
         _transactions.Add(transaction);
+
     }
 
     public List<Transaction> GetAllTransactions()
