@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace Bank_System;
 
 public static class AdminMenu
@@ -81,6 +83,7 @@ public static class AdminMenu
                 
                 break;
             case 3:
+                Console.WriteLine("Пользователи");
                 MenuUsers();
                 break;
             case 4:
@@ -96,70 +99,186 @@ public static class AdminMenu
 
     public static void MenuUsers()
     {
-        // TODO: принтим всех пользователей
-        // ФИО
-        // дата рождения
-        // id
-        // номер телефона
-        // Список карт - кроме PIN
+
         
-        // -----Вынестив в отельный метод для поиска пользователя ----- //
+        Bank.ShowAllUsers();
+
+       
+        
+        
         Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
         string findUserData = Console.ReadLine();
         if (findUserData.Trim().Length == 0)
             return;
-        // Todo: ищем пользователя
-        // выводим инфу о найденом пользователе если нет запрашиваем еще раз 
-        // ----- //
-        
-        // если есть заблокированные карты выводим вариант выбор вариант 1 и 0 если нет то только 0
-        Console.WriteLine("1) Разблокировать карту");
-        Console.WriteLine("0) Вернуться назад");
-        int action = MainMenu.GetActionMenu(1);
-        switch (action)
-        {
-            case 1:
-                Console.WriteLine("1) Разблокировать карту");
-                //Todo: разблокировать карту 
-                break;
-            case 2:
-                Console.WriteLine("0) Вернуться назад");
-                //Todo: Статистика
-                break;
-            case 0:
-                return;
-        }
 
-        MenuUsers();
+        BankUser user = Bank.GetUserByData(findUserData);
+
+        try
+        {
+
+            if(user != null)
+            {
+                
+                Console.WriteLine("Выбраный пользователь: ");
+                user.ShowUserInfo();
+
+
+
+                // если есть заблокированные карты выводим вариант выбор вариант 1 и 0 если нет то только 0
+                if (user.IsAnyBlocked())
+                {
+                    Console.WriteLine("1) Разблокировать карту");
+                }
+                Console.WriteLine("0) Вернуться назад");
+                int action = MainMenu.GetActionMenu(1);
+                switch (action)
+                {
+                    case 1:
+                        Console.WriteLine("1) Разблокировать карту");
+                        if (!user.IsAnyBlocked())
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Заблокрованные карты пользователя: ");
+
+                            user.ShowAllBlockedCard();
+                            Console.Write("Введите номер карты: ");
+                            string searchedNumber = Console.ReadLine() ;
+                            user.UnlockCard(searchedNumber);
+                        }
+
+                        break;
+                    case 0:
+                        return;
+                }
+
+
+            }
+            else
+            {
+                throw new Exception("Пользователь не найден");
+            }
+        }
+        catch(Exception ex)
+        {
+            Message.ErrorMessage(ex.Message);
+        }
+        
+        
+         MenuUsers();
     }
     
     public static void MenuStatistic()
     {
-        Console.WriteLine("Статистика");
-        Console.WriteLine("1) Заработок на комиссиях по конкретному пользователю");
-        Console.WriteLine("2) Заработок на комиссиях со всех пользователей");
-        Console.WriteLine("0) Выйти");
 
-        int action = MainMenu.GetActionMenu(2);
-        
-        switch (action)
+        try
         {
-            case 1:
-                Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
-                //Todo: Заработок на комиссиях по конкретному пользователю
-                // предлагаем сохранить в текстовый файл
-                break;
-            case 2:
-                Console.WriteLine("Заработок на комиссиях по всем пользователям");
-                // ФИО: 1031.4 UAH
-                // ФИО: 25.4 UAH
-                // Сума: 1031.4 + 25.4 UAH
-                //Todo: Заработок на комиссиях со всех пользователей - потом предлаем сохрнаить в текстовый файл
-                break;
-            case 0:
-                return;
+            
+            
+            Console.WriteLine("Статистика");
+            Console.WriteLine("1) Заработок на комиссиях по конкретному пользователю");
+            Console.WriteLine("2) Заработок на комиссиях со всех пользователей");
+            Console.WriteLine("0) Выйти");
+
+            int action = MainMenu.GetActionMenu(2);
+            switch (action)
+            {
+                case 1:
+                    Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
+                    //Todo: Заработок на комиссиях по конкретному пользователю
+
+
+                    Bank.ShowAllUsers();
+
+                    Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
+                    string findUserData = Console.ReadLine();
+                    if (findUserData.Trim().Length == 0)
+                        return;
+
+                    BankUser user = Bank.GetUserByData(findUserData);
+
+
+                    double resultSum = user.GetSumOfComisionByUser();
+                    Console.WriteLine($"{user.Name}: {resultSum}");
+
+                    Console.Write("Желаете загрузить файл?: \n1) Да \n2) Нет");
+
+                    int fileAction = MainMenu.GetActionMenu(2);
+                    try
+                    {
+                        switch(fileAction)
+                        {
+                            case 1:
+                                {
+                                    //запись в файл
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    } 
+                        
+                    break;
+                case 2:
+                    Console.WriteLine("Заработок на комиссиях по всем пользователям");
+
+
+                    foreach(MainUser user1 in Common.Bank.Users)
+                    {
+                        if(user1.UserRole == Role.BankUser)
+                        {
+                            (user1 as BankUser).GetSumOfComisionByUser();
+
+                        }
+                    }
+
+                    Console.Write("Желаете загрузить файл?: \n1) Да \n2) Нет");
+
+                    int fileAction = MainMenu.GetActionMenu(2);
+                    try
+                    {
+                        switch (fileAction)
+                        {
+                            case 1:
+                                {
+                                    //запись в файл
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    }
+
+                    break;
+                case 0:
+                    return;
+            }
+          
+
+
+
+
+        }
+        catch (Exception ex) { 
+            Message.ErrorMessage (ex.Message);
         }
 
         MenuStatistic();
     }
+
+
 }

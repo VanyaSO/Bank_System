@@ -14,7 +14,8 @@ namespace Bank_System
         public string Login { get; set; } //не меняется
         public string Password { get; set; }
 
-        public Role UserRole { get; private set; }
+        public Role UserRole { get; set; }
+
 
         public MainUser() { }
         public MainUser(string name,string login, string password, Role userRole)
@@ -27,48 +28,64 @@ namespace Bank_System
         
         public static void LogIn()
         {
-
-            string pass, login;
-            Console.Write("Введите логин: ");
-            if(string.IsNullOrEmpty(login = Console.ReadLine()))
+            try
             {
-                throw new Exception("Пустое поле логина");
-            }
 
-            if (IsRegistered(login))
-            {
-            
-                Console.Write("Введите пароль: ");
-                if(string.IsNullOrEmpty(pass = Console.ReadLine()))
+                string pass, login;
+                Console.Write("Введите логин: ");
+                if(string.IsNullOrEmpty(login = Console.ReadLine()))
                 {
-                    throw new Exception("Пустое поле пароля");
+                    throw new Exception("Пустое поле логина");
                 }
 
-                Common.User = EnterInAccount(login, pass);
+                if (IsRegistered(login))
+                {
+            
+
+                    Console.Write("Введите пароль: ");
+                    if(string.IsNullOrEmpty(pass = Console.ReadLine()))
+                    {
+                        throw new Exception("Пустое поле пароля");
+                    }
+                    try
+                    {
+                        Common.User = EnterInAccount(login, pass);
+
+                    }
+                    catch(Exception ex)
+                    {
+                        Message.ErrorMessage(ex.Message);
+                    }
 
                 
 
+                }
+                else
+                {
+                    throw new Exception("Аккаунт с таким логином не найден");
+                }
+
             }
-            else
-            {
-                throw new Exception("Аккаунт с таким логином не найден");
+            catch (Exception ex) {
+                Message.ErrorMessage (ex.Message); 
             }
+
         }
        
         public static MainUser? EnterInAccount(string login,string pass)
         {
-            foreach(var user in Common.Bank.Users) //из пользователей банка который выберет
+            foreach(MainUser user in Common.Bank.Users) //из пользователей банка который выберет
             {
                 if (user.Login == login)
                 {
 
                     if(user.Password == pass)
-                        {
+                    {
                           return user;
                     }
                     else
                     {
-                        throw new Exception("Неправлильный пароль");
+                        throw new AccessViolationException("Неправлильный пароль");
                     }
                 }
                 
@@ -77,20 +94,6 @@ namespace Bank_System
             throw new AccessViolationException("Аккаунт с таким логином не найден");
         } 
         
-
-       
-
-        private static bool ConfirmPass(MainUser? user)
-        {
-            Console.Write("Введите пароль: ");
-            string pass = Console.ReadLine();
-            if(user.Password == pass)
-            {
-                return true;
-            }
-            return false;
-            
-        }
 
         private static bool IsRegistered(string login) 
         {
@@ -106,7 +109,7 @@ namespace Bank_System
 
         public override string ToString()
         {
-            return $"Имя: {Name}\nЛогин: {Login}\nПароль: {Password}";
+            return $"Имя: {Name}\nЛогин: {Login}";
         }
     }
 }
