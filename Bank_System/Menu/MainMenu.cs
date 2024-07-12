@@ -43,6 +43,7 @@ public static class MainMenu
                         {
                             Message.SuccessMessage("Вход в аккаунт выполнен успешно");
                             Message.SuccessMessage($"Добро пожаловать {Common.User.Name}");
+                            
                             BankUserMenu.Menu();
 
                         }
@@ -86,6 +87,7 @@ public static class MainMenu
                 (Common.User as BankUser).Registration();
                 break;
             case 0:
+                Common.User = null; //при повторном логине,если данные введены неверно будет вход в пред акк
                 return;
         }
 

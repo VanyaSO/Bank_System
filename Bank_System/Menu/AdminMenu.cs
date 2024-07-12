@@ -6,6 +6,8 @@ public static class AdminMenu
 {
     public static void Menu()
     {
+        Thread.Sleep(1500);
+        Console.Clear();
         Admin? admin = Common.User as Admin;
 
         Console.WriteLine("Меню администратора");
@@ -36,6 +38,7 @@ public static class AdminMenu
                     {
                         admin.ChangeLogin(newLogin);
                         Message.SuccessMessage("Логин успешно изменен");
+                        Thread.Sleep(1000); 
                     }
                 }
                 catch (Exception ex)
@@ -67,6 +70,7 @@ public static class AdminMenu
                             {
                                 admin.ChangePass(newPass);
                                 Message.SuccessMessage("Пароль успешно изменен");
+                                Thread.Sleep(1000);
                             }
                         }
                         else
@@ -85,6 +89,7 @@ public static class AdminMenu
             case 3:
                 Console.WriteLine("Пользователи");
                 MenuUsers();
+
                 break;
             case 4:
                 Console.WriteLine("Статистика");
@@ -99,8 +104,8 @@ public static class AdminMenu
 
     public static void MenuUsers()
     {
+        Console.Clear();
 
-        
         Bank.ShowAllUsers();
 
        
@@ -205,7 +210,7 @@ public static class AdminMenu
                     double resultSum = user.GetSumOfComisionByUser();
                     Console.WriteLine($"{user.Name}: {resultSum}");
 
-                    Console.Write("Желаете загрузить файл?: \n1) Да \n2) Нет");
+                    Console.WriteLine("Желаете загрузить файл?: \n1) Да \n2) Нет");
 
                     fileAction = MainMenu.GetActionMenu(2);
                     try
@@ -214,7 +219,7 @@ public static class AdminMenu
                         {
                             case 1:
                             {
-                                //запись в файл
+                                FileSystem.SaveStatisticEarnCommissionsToTxt(user);
                                 break;
                             }
                             default:
@@ -239,7 +244,8 @@ public static class AdminMenu
                     {
                         if(user1.UserRole == Role.BankUser)
                         {
-                            (user1 as BankUser).GetSumOfComisionByUser();
+                                Console.WriteLine($"{user1.Name} : {(user1 as BankUser).GetSumOfComisionByUser()}");
+                            
 
                         }
                     }
@@ -252,7 +258,7 @@ public static class AdminMenu
                         switch (fileAction)
                         {
                             case 1:
-                                //запись в файл
+                                FileSystem.SaveStatisticEarnCommissionsToTxt(Common.Bank.Users);
                                 break;
                         }
                     }

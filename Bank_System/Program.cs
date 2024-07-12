@@ -7,5 +7,6 @@ class Program
         Common.StartProgram();
         MainMenu.Menu();
         Common.FinishProgram();
+
     }
 }

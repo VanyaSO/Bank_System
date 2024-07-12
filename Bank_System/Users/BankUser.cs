@@ -147,7 +147,7 @@ namespace Bank_System
             {
                 if (IsActive(card))
                 {
-                    Console.WriteLine("==============");
+                    
                     Console.WriteLine($"{card.CardNumber} : {card.Balance}{card.Currency}") ;
                     Console.WriteLine("==============");
                 }
@@ -160,7 +160,10 @@ namespace Bank_System
         {
             foreach (var el in UserCards)
             {
-                Console.WriteLine(el);
+                
+                Console.WriteLine($"{el.CardNumber} : {el.Balance}{el.Currency}");
+                Console.WriteLine($"Card status: {el.Status}");
+                Console.WriteLine("==============");
             }
         }
         
@@ -185,7 +188,7 @@ namespace Bank_System
             Console.WriteLine($"ФИО: {Name}");
             Console.WriteLine($"Дата рождения: {BDate}");
             Console.WriteLine($"Номер телефона: {PhoneNumber}");
-            Console.WriteLine($"Список карт: ");
+            Console.WriteLine("\tСписок карт: ");
             this.ShowAllCards();
 
         }
@@ -444,7 +447,7 @@ namespace Bank_System
 
                 foreach (var el in list)
                 {
-                    if (el.RecipientName == Common.User.Name)
+                    if (el.SenderInitials == Name)
                     {
                         Console.WriteLine(el);
                     }
@@ -461,11 +464,11 @@ namespace Bank_System
             if(list.Count > 0)
             {
 
-                foreach(var el in list)
+                foreach(Transaction el in list)
                 {
-                    if(el.SenderInitials == Common.User.Name)
+                    if(el.RecipientName == Name)
                     {
-                        Console.WriteLine(el);
+                        el.DisplayTransactionDetails();
 
                     }
                 }
