@@ -21,12 +21,6 @@ public class Transaction
         ExchangeRate = exchangeRate;
         RecipientName = recipientName;
         SenderInitials = senderInitials;
-        
-        // Если валюта одна и та же, курс обмена не нужен
-        if (exchangeRate != null)
-        {
-            throw new ArgumentException("Exchange rate should not be provided for transactions within the same currency.");
-        }
     }
 
     public void DisplayTransactionDetails()

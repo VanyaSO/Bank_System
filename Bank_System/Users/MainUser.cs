@@ -42,8 +42,15 @@ namespace Bank_System
                 {
                     throw new Exception("Пустое поле пароля");
                 }
+                try
+                {
+                    Common.User = EnterInAccount(login, pass);
 
-                Common.User = EnterInAccount(login, pass);
+                }
+                catch(Exception ex)
+                {
+                    Message.ErrorMessage(ex.Message);
+                }
 
                 
 
@@ -67,7 +74,7 @@ namespace Bank_System
                     }
                     else
                     {
-                        throw new Exception("Неправлильный пароль");
+                        throw new AccessViolationException("Неправлильный пароль");
                     }
                 }
                 
@@ -76,20 +83,6 @@ namespace Bank_System
             throw new AccessViolationException("Аккаунт с таким логином не найден");
         } 
         
-
-       
-
-        private static bool ConfirmPass(MainUser? user)
-        {
-            Console.Write("Введите пароль: ");
-            string pass = Console.ReadLine();
-            if(user.Password == pass)
-            {
-                return true;
-            }
-            return false;
-            
-        }
 
         private static bool IsRegistered(string login) 
         {
@@ -105,7 +98,7 @@ namespace Bank_System
 
         public override string ToString()
         {
-            return $"Имя: {Name}\nЛогин: {Login}\nПароль: {Password}";
+            return $"Имя: {Name}\nЛогин: {Login}";
         }
     }
 }

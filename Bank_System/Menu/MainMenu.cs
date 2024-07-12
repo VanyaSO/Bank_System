@@ -34,28 +34,37 @@ public static class MainMenu
             case 1:
                 try
                 {
-
+                    
                     MainUser.LogIn();
-                  
-                    if (Common.User.UserRole == Role.BankUser)
+                    if (Common.User != null)
                     {
-                        Message.SuccessMessage("Вход в аккаунт выполнен успешно");
-                        Message.SuccessMessage($"Добро пожаловать {Common.User.Name}");
-                        BankUserMenu.Menu();
 
+                        if (Common.User.UserRole == Role.BankUser)
+                        {
+                            Message.SuccessMessage("Вход в аккаунт выполнен успешно");
+                            Message.SuccessMessage($"Добро пожаловать {Common.User.Name}");
+                            BankUserMenu.Menu();
+
+                        }
+                        else if (Common.User.UserRole == Role.Admin)
+                        {
+                            Message.SuccessMessage("Вы вошли в аккаунт администратора");
+                            AdminMenu.Menu();
+
+                        }
                     }
-                    else if(Common.User.UserRole == Role.Admin)
+                    else
                     {
-                        Message.SuccessMessage("Вы вошли в аккаунт администратора");
-                        AdminMenu.Menu();
-                        
+                        Message.WarningMessage("Повторите попытку");
                     }
+
 
                 }
                 catch (AccessViolationException ex)
                 {
                     Console.WriteLine(ex.Message);
                     Console.WriteLine("Хотите зарегать акк 1 - Yes | 2 - No"); //изменить
+                    Console.WriteLine("Хотите зарегистрировать аккаунт? \n1) Да  \n2) Нет"); 
                     int action2 = GetActionMenu(2);
                     switch (action2)
                     {
