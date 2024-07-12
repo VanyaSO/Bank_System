@@ -465,7 +465,7 @@ namespace Bank_System
             else
             {
                 decimal resultSum = Int32.Parse(sumForSend);
-                // card.Transfer(cardForTranf, resultSum, card.Currency, Name);
+                card.Transfer(cardForTranf, resultSum, Name);
                 Message.SuccessMessage("Перевод успешно выполнен");
             }
         }
