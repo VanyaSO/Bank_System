@@ -205,9 +205,12 @@ public static class AdminMenu
                         Console.WriteLine("Заработок на комиссиях по всем пользователям");
 
 
-                        foreach(BankUser users in Common.Bank.Users)
+                        foreach(MainUser mUser in Common.Bank.Users)
                         {
-                            user.GetSumOfComisionByUser();
+                            if (mUser.UserRole == Role.BankUser)
+                            {
+                                user.GetSumOfComisionByUser();
+                            }
                         }
                         //Todo: Заработок на комиссиях со всех пользователей - потом предлаем сохрнаить в текстовый файл
                         break;

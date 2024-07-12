@@ -530,7 +530,6 @@ namespace Bank_System
                     if(transaction.SenderInitials == Name)
                     {
                         resultSum += (double)Common.Bank.FeeSending;
-
                     }
                 }
             }
