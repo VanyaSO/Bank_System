@@ -264,9 +264,6 @@ namespace Bank_System
 
         public void SendMoney(Card card,Card cardForTranf)
         {
-
-
-
             Console.WriteLine();
             string sumForSend;
             if (string.IsNullOrEmpty(sumForSend = Console.ReadLine()))
@@ -276,7 +273,7 @@ namespace Bank_System
             else
             {
                 decimal resultSum = Int32.Parse(sumForSend);
-                card.Transfer(cardForTranf, resultSum,Name,(decimal)Common.Bank.FeeSending, (decimal)Common.Bank.FeeReceipt);
+                card.Transfer(cardForTranf, resultSum, Name);
                 Message.SuccessMessage("Перевод успешно выполнен");
             }
         }
@@ -521,23 +518,6 @@ namespace Bank_System
         
         //Статистика пользователя
 
-        public void SendMoney(Card card,Card cardForTranf)
-        {
-            string sumForSend;
-            if (string.IsNullOrEmpty(sumForSend = Console.ReadLine()))
-            {
-                throw new Exception("Вы ввели пустую строку");
-            }
-            else
-            {
-                decimal resultSum = Int32.Parse(sumForSend);
-                card.Transfer(cardForTranf, resultSum, Name);
-                Message.SuccessMessage("Перевод успешно выполнен");
-            }
-        }
-
-        public Card? GetCardForTransfer(string number)
-        
         private double GetSumSendCommision()
         {
             double resultSum = 0;
