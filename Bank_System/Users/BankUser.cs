@@ -264,6 +264,10 @@ namespace Bank_System
 
         public void SendMoney(Card card,Card cardForTranf)
         {
+
+
+
+            Console.WriteLine();
             string sumForSend;
             if (string.IsNullOrEmpty(sumForSend = Console.ReadLine()))
             {
