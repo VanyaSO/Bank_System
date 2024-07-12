@@ -133,4 +133,53 @@ public static class FileSystem
     //         
     //     }
     // }
+
+    public static void SaveStatisticEarnCommissionsToTxt(MainUser user)
+    {
+        string pathFile = CreatePathFileStatistics(user.Name);
+        
+        using (StreamWriter sw = new StreamWriter(pathFile))
+        {
+            sw.Write($"{user.Name} \n");
+            sw.Write("Заработано среств на комисиях \n");
+            sw.Write($"Отправка: {(user as BankUser).GetSumSendCommision()} \n");
+            sw.Write($"Получение: {(user as BankUser).GetSumCompleteComision()} \n");
+            sw.Write($"Сумма: {(user as BankUser).GetSumOfComisionByUser()} \n");
+        }
+    }
+    
+    public static void SaveStatisticEarnCommissionsToTxt(List<MainUser> list)
+    {
+        string pathFile = CreatePathFileStatistics("Все Пользователи");
+            
+        using (StreamWriter sw = new StreamWriter(pathFile))
+        {
+            foreach (var user in list)
+            {
+                if (user.UserRole == Role.BankUser)
+                {
+                    sw.Write($"{user.Name} \n");
+                    sw.Write("Заработано среств на комисиях \n");
+                    sw.Write($"Отправка: {(user as BankUser).GetSumSendCommision()} \n");
+                    sw.Write($"Получение: {(user as BankUser).GetSumCompleteComision()} \n");
+                    sw.Write($"Сумма: {(user as BankUser).GetSumOfComisionByUser()} \n \n"); 
+                }
+            }
+        }
+    }
+    
+    private static string CreatePathFileStatistics(string nameFile)
+    {
+        const string pathDir = Common.PathStatisticsDir;
+        if (!Directory.Exists(pathDir))
+            Directory.CreateDirectory(pathDir);
+        
+        string fileName = $"{nameFile.Replace(" ", "_")}_{DateTime.Now.ToString("dd.MM.yyyy_HH:mm")}.txt";
+        string pathFile = Path.Combine(pathDir, fileName);
+        
+        if (File.Exists(pathFile))
+            File.Delete(pathFile);
+        
+        return pathFile;   
+    }
 }

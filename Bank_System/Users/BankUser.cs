@@ -44,7 +44,7 @@ namespace Bank_System
             try
             {
 
-                Console.Write("Введите Ваше имя: ");
+                Console.Write("Введите Ваше имя и фамилию: ");
 
                 if (string.IsNullOrEmpty(Name = Console.ReadLine())) 
                 {
@@ -267,6 +267,7 @@ namespace Bank_System
 
 
 
+
             Console.WriteLine("Введите сумму для перевода: ");
             string sumForSend;
             if (string.IsNullOrEmpty(sumForSend = Console.ReadLine()))
@@ -276,7 +277,7 @@ namespace Bank_System
             else
             {
                 decimal resultSum = Int32.Parse(sumForSend);
-                card.Transfer(cardForTranf, resultSum,Name,(decimal)Common.Bank.FeeSending, (decimal)Common.Bank.FeeReceipt);
+                card.Transfer(cardForTranf, resultSum, Name);
                 Message.SuccessMessage("Перевод успешно выполнен");
             }
         }
@@ -521,8 +522,7 @@ namespace Bank_System
         
         //Статистика пользователя
 
-
-        private double GetSumSendCommision()
+        public double GetSumSendCommision()
         {
             double resultSum = 0;
 
@@ -542,7 +542,7 @@ namespace Bank_System
         }
 
 
-        private double GetSumCompleteComision()
+        public double GetSumCompleteComision()
         {
             double resultSum = 0;
 

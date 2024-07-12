@@ -51,7 +51,7 @@ public static class BankUserMenu
                         {
                             Card cardForTransfer = user.GetCardForTransfer(cardNumberRec);
 
-                            user.SendMoney(userCard,cardForTransfer);
+                            user.SendMoney(userCard, cardForTransfer);
 
                         }
                     }
@@ -147,10 +147,12 @@ public static class BankUserMenu
                 Console.WriteLine("Курс валют");
                 foreach (var el in Common.Bank.Currencies)
                 {
+
                    
                     Console.WriteLine($"[{el.Key}]: {el.Value}");   
 
                     
+
                 }
                 break;
             case 6:
