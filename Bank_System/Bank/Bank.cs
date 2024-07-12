@@ -47,4 +47,21 @@ public class Bank
 
         return null;
     }
+
+
+    public static void ShowAllCommision()
+    {
+        double fullSum = 0;
+        foreach (BankUser user in Common.Bank.Users)
+        {
+
+            double sum = user.GetSumOfComisionByUser();
+            fullSum += sum;
+            Console.WriteLine($"{user.Name}: {sum}");
+        }
+
+        Console.WriteLine($"Общая сумма заработка на комиссии: {fullSum}");
+
+    }
+
 }

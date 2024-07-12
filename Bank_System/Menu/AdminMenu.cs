@@ -104,7 +104,7 @@ public static class AdminMenu
         // id
         // номер телефона
         // Список карт - кроме PIN
-        ShowAllUsers();
+        Bank.ShowAllUsers();
         
         
         // -----Вынестив в отельный метод для поиска пользователя ----- //
@@ -113,7 +113,7 @@ public static class AdminMenu
         if (findUserData.Trim().Length == 0)
             return;
 
-        BankUser user = GetUserByData(findUserData);
+        BankUser user = Bank.GetUserByData(findUserData);
         try
         {
 
@@ -205,7 +205,7 @@ public static class AdminMenu
                     if (findUserData.Trim().Length == 0)
                         return;
 
-                    BankUser user = GetUserByData(findUserData);
+                    BankUser user = Bank.GetUserByData(findUserData);
 
 
                     double resultSum = user.GetSumOfComisionByUser();
@@ -220,7 +220,7 @@ public static class AdminMenu
                     {
                         if(user1.UserRole == Role.BankUser)
                         {
-                        (user1 as BankUser).GetSumOfComisionByUser();
+                            (user1 as BankUser).GetSumOfComisionByUser();
 
                         }
                     }
@@ -229,13 +229,7 @@ public static class AdminMenu
                 case 0:
                     return;
             }
-            
-
-            
-            else
-            {
-                throw new Exception("Пользователь не найден");
-            }
+          
 
 
 
@@ -247,35 +241,5 @@ public static class AdminMenu
         MenuStatistic();
     }
 
-    //совет куда вынести методы
-
-
-    public static BankUser GetUserByData(string findData)
-    {
-        foreach(BankUser user in Common.Bank.Users)
-        {
-            if(findData == user.Name || findData == user.ID)
-            {
-                return user;
-            }
-        }
-
-        return null;
-    }
-
-
-    public static void ShowAllCommision()
-    {
-        double fullSum = 0;
-        foreach(BankUser user in Common.Bank.Users)
-        {
-            
-            double sum = user.GetSumOfComisionByUser();
-            fullSum += sum;
-            Console.WriteLine($"{user.Name}: {sum}");
-        }
-
-        Console.WriteLine($"Общая сумма заработка на комиссии: {fullSum}");
-
-    }
+    
 }

@@ -102,7 +102,7 @@ public static class MainMenu
         }
 
 
-        //Проверка на роль
+       
         
         
         Menu();
