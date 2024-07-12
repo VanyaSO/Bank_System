@@ -32,7 +32,6 @@ public static class MainMenu
         switch (action)
         {
             case 1:
-                Console.WriteLine("Делаем Вход");
                 try
                 {
                     
@@ -64,26 +63,20 @@ public static class MainMenu
                 catch (AccessViolationException ex)
                 {
                     Console.WriteLine(ex.Message);
+                    Console.WriteLine("Хотите зарегать акк 1 - Yes | 2 - No"); //изменить
                     Console.WriteLine("Хотите зарегистрировать аккаунт? \n1) Да  \n2) Нет"); 
                     int action2 = GetActionMenu(2);
                     switch (action2)
                     {
                         case 1:
-
-                            BankUser newUser1 = new BankUser(); 
+                            BankUser newUser1 = new BankUser(); //переделать
                             newUser1.Registration();
                             Common.User = newUser1;
                             break;
                         case 2:
                             break;
-
-                        
-                        
                     }
                 }
-
-                
-
                 break;
             case 2:
                 Console.WriteLine("Делаем Регистрацию");
@@ -91,11 +84,6 @@ public static class MainMenu
 
                 Common.User = new BankUser();
                 (Common.User as BankUser).Registration();
-
-       
-
-                
-                
                 break;
             case 0:
                 return;
