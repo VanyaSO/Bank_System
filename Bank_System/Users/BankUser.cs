@@ -449,7 +449,7 @@ namespace Bank_System
                 {
                     if (el.SenderInitials == Name)
                     {
-                        Console.WriteLine(el);
+                        el.DisplayTransactionDetails() ;
                     }
                 }
             }

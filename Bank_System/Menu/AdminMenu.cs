@@ -6,8 +6,7 @@ public static class AdminMenu
 {
     public static void Menu()
     {
-        Thread.Sleep(1500);
-        Console.Clear();
+        
         Admin? admin = Common.User as Admin;
 
         Console.WriteLine("Меню администратора");
@@ -38,7 +37,7 @@ public static class AdminMenu
                     {
                         admin.ChangeLogin(newLogin);
                         Message.SuccessMessage("Логин успешно изменен");
-                        Thread.Sleep(1000); 
+                         
                     }
                 }
                 catch (Exception ex)
@@ -70,7 +69,7 @@ public static class AdminMenu
                             {
                                 admin.ChangePass(newPass);
                                 Message.SuccessMessage("Пароль успешно изменен");
-                                Thread.Sleep(1000);
+                                
                             }
                         }
                         else
@@ -104,7 +103,7 @@ public static class AdminMenu
 
     public static void MenuUsers()
     {
-        Console.Clear();
+        
 
         Bank.ShowAllUsers();
 

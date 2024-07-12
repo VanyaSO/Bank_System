@@ -270,11 +270,11 @@ public static class BankUserMenu
         Console.Clear();
         BankUser user = Common.User as BankUser;
 
-        Console.WriteLine("5) Показать все транзакции");
         Console.WriteLine("1) Показать отправленные транзакции");
         Console.WriteLine("2) Показать последние полученные транзакции");
         Console.WriteLine("3) Показать сумму полученых средств по каждой карте");
         Console.WriteLine("4) Показать сумму отправленных средств по каждой карте");
+        Console.WriteLine("5) Показать все транзакции");
 
         Console.Write("Введите ответ: ");
         int action = MainMenu.GetActionMenu(5);
@@ -330,7 +330,8 @@ public static class BankUserMenu
                         }
                         else 
                         {
-                            user.ShowCompleteSum(user.GetCardByNumber(cardNumber));
+                            Card card = user.GetCardByNumber(cardNumber);
+                            user.ShowCompleteSum(card);
                         }
                         
                     }
