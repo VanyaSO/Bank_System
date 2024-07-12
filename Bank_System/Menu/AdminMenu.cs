@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace Bank_System;
 
 public static class AdminMenu
@@ -102,64 +104,176 @@ public static class AdminMenu
         // id
         // номер телефона
         // Список карт - кроме PIN
+        ShowAllUsers();
+        
         
         // -----Вынестив в отельный метод для поиска пользователя ----- //
         Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
         string findUserData = Console.ReadLine();
         if (findUserData.Trim().Length == 0)
             return;
-        // Todo: ищем пользователя
-        // выводим инфу о найденом пользователе если нет запрашиваем еще раз 
-        // ----- //
-        
-        // если есть заблокированные карты выводим вариант выбор вариант 1 и 0 если нет то только 0
-        Console.WriteLine("1) Разблокировать карту");
-        Console.WriteLine("0) Вернуться назад");
-        int action = MainMenu.GetActionMenu(1);
-        switch (action)
-        {
-            case 1:
-                Console.WriteLine("1) Разблокировать карту");
-                //Todo: разблокировать карту 
-                break;
-            case 2:
-                Console.WriteLine("0) Вернуться назад");
-                //Todo: Статистика
-                break;
-            case 0:
-                return;
-        }
 
-        MenuUsers();
+        BankUser user = GetUserByData(findUserData);
+        try
+        {
+
+            if(user != null)
+            {
+                // Todo: ищем пользователя
+                // выводим инфу о найденом пользователе если нет запрашиваем еще раз 
+                // ----- //
+                Console.WriteLine("Выбраный пользователь: ");
+                user.ShowUserInfo();
+
+
+
+                // если есть заблокированные карты выводим вариант выбор вариант 1 и 0 если нет то только 0
+                if (user.IsAnyBlocked())
+                {
+                    Console.WriteLine("1) Разблокировать карту");
+                }
+                Console.WriteLine("0) Вернуться назад");
+                int action = MainMenu.GetActionMenu(1);
+                switch (action)
+                {
+                    case 1:
+                        Console.WriteLine("1) Разблокировать карту");
+                        if (!user.IsAnyBlocked())
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Заблокрованные карты пользователя: ");
+
+                            user.ShowAllBlockedCard();
+                            Console.Write("Введите номер карты: ");
+                            string searchedNumber = Console.ReadLine() ;
+                            user.UnlockCard(searchedNumber);
+                        }
+
+                        break;
+                    //case 2:
+                    //    Console.WriteLine("0) Вернуться назад");
+                        
+                    //    break;
+                    case 0:
+                        return;
+                }
+
+
+            }
+            else
+            {
+                throw new Exception("Пользователь не найден");
+            }
+        }
+        catch(Exception ex)
+        {
+            Message.ErrorMessage(ex.Message);
+        }
+        
+        
+         MenuUsers();
     }
     
     public static void MenuStatistic()
     {
-        Console.WriteLine("Статистика");
-        Console.WriteLine("1) Заработок на комиссиях по конкретному пользователю");
-        Console.WriteLine("2) Заработок на комиссиях со всех пользователей");
-        Console.WriteLine("0) Выйти");
+        ShowAllUsers();
 
-        int action = MainMenu.GetActionMenu(2);
-        
-        switch (action)
-        {
-            case 1:
-                Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
-                //Todo: Заработок на комиссиях по конкретному пользователю
-                // предлагаем сохранить в текстовый файл
-                break;
-            case 2:
-                Console.WriteLine("Заработок на комиссиях по всем пользователям");
-                // ФИО: 1031.4 UAH
-                // ФИО: 25.4 UAH
-                // Сума: 1031.4 + 25.4 UAH
-                //Todo: Заработок на комиссиях со всех пользователей - потом предлаем сохрнаить в текстовый файл
-                break;
-            case 0:
-                return;
+        Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
+        string findUserData = Console.ReadLine();
+        if (findUserData.Trim().Length == 0)
+            return;
+
+        BankUser user = GetUserByData(findUserData);
+        try
+            {
+            if(user!= null)
+            {
+                Console.WriteLine("Статистика");
+                Console.WriteLine("1) Заработок на комиссиях по конкретному пользователю");
+                Console.WriteLine("2) Заработок на комиссиях со всех пользователей");
+                Console.WriteLine("0) Выйти");
+
+                int action = MainMenu.GetActionMenu(2);
+                switch (action)
+                {
+                    case 1:
+                        Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
+                        //Todo: Заработок на комиссиях по конкретному пользователю
+                        double resultSum = user.GetSumOfComisionByUser();
+                        Console.WriteLine($"{user.Name}: {resultSum}");
+                        // предлагаем сохранить в текстовый файл
+                        break;
+                    case 2:
+                        Console.WriteLine("Заработок на комиссиях по всем пользователям");
+
+
+                        foreach(BankUser users in Common.Bank.Users)
+                        {
+                            user.GetSumOfComisionByUser();
+                        }
+                        // ФИО: 1031.4 UAH
+                        // ФИО: 25.4 UAH
+                        // Сума: 1031.4 + 25.4 UAH
+                        //Todo: Заработок на комиссиях со всех пользователей - потом предлаем сохрнаить в текстовый файл
+                        break;
+                    case 0:
+                        return;
+                }
+
+            }
+            else
+            {
+                throw new Exception("Пользователь не найден");
+            }
+
+
+
+        }
+        catch (Exception ex) { 
+            Message.ErrorMessage (ex.Message);
         }
 
         MenuStatistic();
+    }
+
+    //совет куда вынести методы
+    public static void ShowAllUsers() 
+    {
+        foreach(BankUser user in Common.Bank.Users)
+        {
+            user.ShowUserInfo();
+        }
+    }
+
+    public static BankUser GetUserByData(string findData)
+    {
+        foreach(BankUser user in Common.Bank.Users)
+        {
+            if(findData == user.Name || findData == user.ID)
+            {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+
+    public static void ShowAllCommision()
+    {
+        double fullSum = 0;
+        foreach(BankUser user in Common.Bank.Users)
+        {
+            
+            double sum = user.GetSumOfComisionByUser();
+            fullSum += sum;
+            Console.WriteLine($"{user.Name}: {sum}");
+        }
+
+        Console.WriteLine($"Общая сумма заработка на комиссии: {fullSum}");
+
     }
 }

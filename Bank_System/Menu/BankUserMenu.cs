@@ -41,6 +41,7 @@ public static class BankUserMenu
                     else
                     {
                         Card userCard = user.GetCardByNumber(cardNumber);
+                        Console.Write("Введите номер карты на которую надо отправить: ");
                         string cardNumberRec;
                         if(string.IsNullOrEmpty(cardNumberRec = Console.ReadLine()))
                         {
@@ -144,7 +145,10 @@ public static class BankUserMenu
                 break;
             case 5:
                 Console.WriteLine("Курс валют");
-                //Todo: Курс валют
+                foreach (var el in Common.Bank.Currencies)
+                {
+                    Console.WriteLine($"[{el.Key}]: {el.Value}");
+                }
                 break;
             case 6:
                 Console.WriteLine("Мои транзакции");

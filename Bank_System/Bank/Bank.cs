@@ -10,7 +10,7 @@ public class Bank
     public List<MainUser> Users = new List<MainUser>();
     
     
-    public Bank(string name, string currency, double feeSending, double feeReceipt,List<MainUser> list = null)
+    public Bank(string name, string currency, double feeSending, double feeReceipt,List<MainUser> list)
     {
         Users = list;
         Name = name;

@@ -112,7 +112,7 @@ public class Card
 
     public override string ToString()
     {
-        return $"Номер карты: {CardNumber} \nПин-код: {_pinCode} \nВалюта: {Currency} \nБаланс: {Balance} \nСтатус: {Status} \n";
+        return $"Номер карты: {CardNumber} \nВалюта: {Currency} \nБаланс: {Balance} \nСтатус: {Status} \n";
     }
     
     public void Transfer(Card recipientCard, decimal amount, string senderInitials, double feesend, double feereceipt, decimal? exchangeRate = null, string recipientName = null)

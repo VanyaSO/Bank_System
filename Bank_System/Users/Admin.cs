@@ -28,7 +28,7 @@ namespace Bank_System
         public void ChangePass(string pass) => Password = pass;
         public void ChangeLogin(string login) => Login = login;
         
-
+        
         
 
        
