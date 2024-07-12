@@ -98,14 +98,7 @@ public static class AdminMenu
 
     public static void MenuUsers()
     {
-        // TODO: принтим всех пользователей
-        // ФИО
-        // дата рождения
-        // id
-        // номер телефона
-        // Список карт - кроме PIN
         ShowAllUsers();
-        
         
         // -----Вынестив в отельный метод для поиска пользователя ----- //
         Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
@@ -214,23 +207,16 @@ public static class AdminMenu
                         {
                             user.GetSumOfComisionByUser();
                         }
-                        // ФИО: 1031.4 UAH
-                        // ФИО: 25.4 UAH
-                        // Сума: 1031.4 + 25.4 UAH
                         //Todo: Заработок на комиссиях со всех пользователей - потом предлаем сохрнаить в текстовый файл
                         break;
                     case 0:
                         return;
                 }
-
             }
             else
             {
                 throw new Exception("Пользователь не найден");
             }
-
-
-
         }
         catch (Exception ex) { 
             Message.ErrorMessage (ex.Message);
