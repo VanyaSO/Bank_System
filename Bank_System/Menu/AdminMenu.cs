@@ -172,6 +172,7 @@ public static class AdminMenu
     
     public static void MenuStatistic()
     {
+        // убрать это 
         ShowAllUsers();
 
         Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
@@ -195,6 +196,7 @@ public static class AdminMenu
                     case 1:
                         Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
                         //Todo: Заработок на комиссиях по конкретному пользователю
+                        // убрать вот сюда
                         double resultSum = user.GetSumOfComisionByUser();
                         Console.WriteLine($"{user.Name}: {resultSum}");
                         // предлагаем сохранить в текстовый файл
@@ -228,27 +230,26 @@ public static class AdminMenu
     //совет куда вынести методы
     public static void ShowAllUsers() 
     {
-        foreach(BankUser user in Common.Bank.Users)
+        foreach(MainUser user in Common.Bank.Users)
         {
-            user.ShowUserInfo();
+            if (user.UserRole == Role.BankUser)
+                (user as BankUser).ShowUserInfo();
         }
     }
 
     public static BankUser GetUserByData(string findData)
     {
-        foreach(BankUser user in Common.Bank.Users)
+        foreach(MainUser user in Common.Bank.Users)
         {
-            if(findData == user.Name || findData == user.ID)
-            {
-                return user;
-            }
+            if (user.UserRole == Role.BankUser)
+                if(findData == user.Name || findData == (user as BankUser).ID)
+                    return (user as BankUser);
         }
 
         return null;
     }
 
-
-    public static void ShowAllCommision()
+    public static void ShowAllCommisionUsers()
     {
         double fullSum = 0;
         foreach(BankUser user in Common.Bank.Users)

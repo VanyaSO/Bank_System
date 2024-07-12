@@ -13,7 +13,7 @@ namespace Bank_System
         public string Name { get; set; } //не меняется 
         public string Login { get; set; } //не меняется
         public string Password { get; set; }
-        public Role UserRole { get; private set; }
+        public Role UserRole { get; set; }
 
         public MainUser() { }
         public MainUser(string name,string login, string password, Role userRole)
@@ -45,15 +45,11 @@ namespace Bank_System
                 try
                 {
                     Common.User = EnterInAccount(login, pass);
-
                 }
                 catch(Exception ex)
                 {
                     Message.ErrorMessage(ex.Message);
                 }
-
-                
-
             }
             else
             {
@@ -63,7 +59,7 @@ namespace Bank_System
        
         public static MainUser? EnterInAccount(string login,string pass)
         {
-            foreach(var user in Common.Bank.Users) //из пользователей банка который выберет
+            foreach(MainUser user in Common.Bank.Users) //из пользователей банка который выберет
             {
                 if (user.Login == login)
                 {

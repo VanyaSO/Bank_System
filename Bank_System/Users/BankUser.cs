@@ -101,9 +101,8 @@ namespace Bank_System
                 else 
                 {
                     OpenNewCard(newPin,CurrencyType.UAH);
-
+                    UserRole = Role.BankUser;
                     Common.Bank.Users.Add(this);
-                
                 }
             }
             catch (Exception ex)
