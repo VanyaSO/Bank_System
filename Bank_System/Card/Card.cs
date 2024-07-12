@@ -113,13 +113,14 @@ public class Card
         return $"Номер карты: {CardNumber} \nВалюта: {Currency} \nБаланс: {Balance} \nСтатус: {Status} \n";
     }
     
-    public void Transfer(Card recipientCard, decimal amount, string senderInitials, decimal feesend, decimal feereceipt, decimal? exchangeRate = null, string recipientName = null)
+
+    public void Transfer(Card recipientCard, decimal amount, string senderInitials)
     {
         if (recipientCard == null)
         {
             throw new ArgumentNullException(nameof(recipientCard));
         }
-
+        
         if (amount <= 0)
         {
             throw new ArgumentException("Transfer amount must be greater than zero.");
@@ -132,31 +133,33 @@ public class Card
 
         if (this.Currency != recipientCard.Currency)
         {
-            if (exchangeRate == null)
+            if (Common.Bank.Currencies == null)
             {
                 throw new ArgumentException("Exchange rate must be provided for transactions to different currencies.");
             }
 
             // TODO: пересмотреть еще раз после добавления QuerrySystem
             
-            decimal exchangedAmount = amount * exchangeRate.Value;
+            decimal exchangedAmount = amount * (decimal)Common.Bank.Currencies[this.Currency] / (decimal)Common.Bank.Currencies[recipientCard.Currency];
 
-            decimal calcFee = (decimal)feereceipt / 100;
-            
+            decimal calcFee = (decimal)Common.Bank.FeeReceipt / 100;
+
             if (calcFee != 0)
-                recipientCard.Deposit(exchangedAmount * calcFee);
-            recipientCard.Deposit(exchangedAmount);
+                recipientCard.Deposit(exchangedAmount - exchangedAmount * calcFee);
+            else
+                recipientCard.Deposit(exchangedAmount);
         }
         else
         {
-            decimal calcFee = (decimal)feereceipt / 100;
+            decimal calcFee = (decimal)Common.Bank.FeeReceipt / 100;
             recipientCard.Deposit(amount * calcFee);
         }
 
-        decimal calcThisFee = (decimal)feesend / 100;
+        decimal calcThisFee = (decimal)Common.Bank.FeeSending / 100;
         if (calcThisFee != 0)
-            Withdraw(amount - amount * calcThisFee);
-        Withdraw(amount);
+            Withdraw(amount + amount * calcThisFee);
+        else
+            Withdraw(amount);
         
 
         // добавил транзакции для обеих сторон
@@ -165,8 +168,7 @@ public class Card
             amount: amount,
             recipientCard: recipientCard,
             senderInitials: senderInitials,
-            exchangeRate: exchangeRate,
-            recipientName: recipientName
+            exchangeRate: (decimal)Common.Bank.Currencies[this.Currency] / (decimal)Common.Bank.Currencies[recipientCard.Currency]
         ));
 
         recipientCard.AddTransaction(new Transaction(
@@ -174,8 +176,7 @@ public class Card
             amount: amount,
             recipientCard: this,
             senderInitials: senderInitials,
-            exchangeRate: exchangeRate,
-            recipientName: recipientName
+            exchangeRate: (decimal)Common.Bank.Currencies[this.Currency] / (decimal)Common.Bank.Currencies[recipientCard.Currency]
         ));
     }
 
