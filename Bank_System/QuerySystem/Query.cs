@@ -11,7 +11,7 @@ public static class Query
     public static async void GetСurrencyRates()
     {
         
-        string path = Common.PathCurrencyRates;
+        string path = Common.PathCurrencyRatesJson;
         // список валют банка 
         List<Currency> listCurrency = new List<Currency>();
 
@@ -23,7 +23,7 @@ public static class Query
         catch (Exception)
         {
             // делаем запрос и получаем новые данные
-            string url = Common.ApiCurrencyRates;
+            string url = Common.ApiCurrencyRatesJson;
             HttpClient client = new HttpClient();
             var response = await client.GetAsync(url);
 
