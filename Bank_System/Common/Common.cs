@@ -8,10 +8,11 @@ public static class Common
     public static MainUser User;
     public static Random Random = new Random();
     
-    public const string ApiCurrencyRates = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
-    public const string PathCurrencyRates = "rates.json";
+    public const string ApiCurrencyRatesJson = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
+    public const string PathCurrencyRatesJson = "rates.json";
     public const string PathBankFileBin = "bank.dat";
     public const string PathUsersFileBin = "users.dat";
+    public const string PathStatisticsDir = "../../../Статистика";
     
     public static void StartProgram()
     {
