@@ -4,8 +4,8 @@ public class Transaction
 {
     public DateTime TransactionTime { get; }
     public decimal Amount { get; }
-    public Card RecipientCard { get; }
-    public Card SenderCard { get; }
+    public TransactionCardInfo SenderCard { get; }
+    public TransactionCardInfo RecipientCard { get; }
     public string RecipientName { get; }
     public decimal? ExchangeRate { get; } // курс обмена валют (если перевод на краты разных валют)
     public string SenderInitials { get; } // наши инициалы
@@ -14,13 +14,24 @@ public class Transaction
     {
         if (string.IsNullOrWhiteSpace(senderInitials)) throw new ArgumentException("Sender initials are required.", nameof(senderInitials));
 
-        TransactionTime = DateTime.Now;
+        SenderCard = new TransactionCardInfo(senderCard.CardNumber, senderCard.Currency);
         Amount = amount;
-        SenderCard = senderCard;
-        RecipientCard = recipientCard;
+        RecipientCard = new TransactionCardInfo(recipientCard.CardNumber, recipientCard.Currency);
+        TransactionTime = DateTime.Now;
+        SenderInitials = senderInitials;
         ExchangeRate = exchangeRate;
         RecipientName = recipientName;
+    }
+    
+    public Transaction(TransactionCardInfo senderCard, decimal amount, TransactionCardInfo recipientCard, DateTime date, string senderInitials, decimal? exchangeRate = null, string recipientName = null)
+    {
+        SenderCard = senderCard;
+        Amount = amount;
+        RecipientCard = recipientCard;
+        TransactionTime = date;
         SenderInitials = senderInitials;
+        ExchangeRate = exchangeRate;
+        RecipientName = recipientName;
     }
 
     public void DisplayTransactionDetails()
