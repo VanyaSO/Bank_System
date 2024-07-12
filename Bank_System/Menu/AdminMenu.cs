@@ -11,8 +11,8 @@ public static class AdminMenu
         Console.WriteLine("Меню администратора");
         Console.WriteLine("1) Изменить логин");
         Console.WriteLine("2) Изменить пароль");
-        Console.WriteLine("3) Пользователи"); //Todo: Menu
-        Console.WriteLine("4) Статистика"); //
+        Console.WriteLine("3) Пользователи");
+        Console.WriteLine("4) Статистика");
         Console.WriteLine("0) Выйти");
 
         int action = MainMenu.GetActionMenu(4);
