@@ -186,6 +186,7 @@ public static class AdminMenu
             switch (action)
             {
                 case 1:
+                {
                     Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
                     //Todo: Заработок на комиссиях по конкретному пользователю
 
@@ -211,14 +212,14 @@ public static class AdminMenu
                         switch(fileAction)
                         {
                             case 1:
-                                {
-                                    //запись в файл
-                                    break;
-                                }
+                            {
+                                //запись в файл
+                                break;
+                            }
                             default:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -227,7 +228,9 @@ public static class AdminMenu
                     } 
                         
                     break;
+                }
                 case 2:
+                {
                     Console.WriteLine("Заработок на комиссиях по всем пользователям");
 
 
@@ -248,14 +251,8 @@ public static class AdminMenu
                         switch (fileAction)
                         {
                             case 1:
-                                {
-                                    //запись в файл
-                                    break;
-                                }
-                            default:
-                                {
-                                    break;
-                                }
+                                //запись в файл
+                                break;
                         }
                     }
                     catch (Exception ex)
@@ -264,6 +261,7 @@ public static class AdminMenu
                     }
 
                     break;
+                }
                 case 0:
                     return;
             }
