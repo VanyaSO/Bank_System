@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Bank_System;
 
 public static class Common
@@ -7,18 +9,27 @@ public static class Common
     public static Random Random = new Random();
     
     public const string ApiCurrencyRates = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
-    public const string PathBankDataDir = "./BankData";
     public const string PathCurrencyRates = "rates.json";
-    public const string PathBankData = "bank.dat";
+    public const string PathBankFileBin = "bank.dat";
+    public const string PathUsersFileBin = "users.dat";
     
     public static void StartProgram()
     {
+        if (File.Exists(PathBankFileBin))
+        {
+            FileSystem.LoadBank();
+            FileSystem.LoadUsers();
+        }
+        else 
+            DefaultData();
+        
         Query.GetСurrencyRates();
     }
     
     public static void FinishProgram()
     {
-        FileSystem.SaveBankData();
+        FileSystem.SaveBank();
+        FileSystem.SaveUsers();
     }
     
     public static int GetAction(int maxVarAction, int minVarAction)
@@ -34,14 +45,28 @@ public static class Common
         return action;
     }
 
-    public static CurrencyType ParseStringToCurrencyType(string str) => (CurrencyType)Enum.Parse(typeof(CurrencyType), str);
-    
-    public static string CreatePath(string path, string dir = PathBankDataDir)
+    public static CurrencyType ParseStrToCurrencyType(string str) => (CurrencyType)Enum.Parse(typeof(CurrencyType), str);
+    public static Role ParseStrToRoleType(string str) => (Role)Enum.Parse(typeof(Role), str);
+    public static CardStatus ParseStrToCardStatus(string str) => (CardStatus)Enum.Parse(typeof(CardStatus), str);
+
+    // чтобы были дефолтные данные если нету файлов
+    public static void DefaultData()
     {
-        if (!Directory.Exists(dir))
-            Directory.CreateDirectory(dir);
-
-        return Path.Combine(dir, path);
+        Bank = new Bank("MonoBank", CurrencyType.UAH,2.0, 2.0,
+            new List<MainUser>()
+            {
+                new Admin("Иванов Иван", "admin", "admin"),
+                new BankUser("Анна Петрова", "anna", "пароль123", "380952144378", "1", new DateOnly(1995, 8, 21), 
+                    new List<Card>()
+                    {
+                        new Card("1111", CurrencyType.EUR, 500.00m)
+                    }),
+                new BankUser("Павел Сидоров", "pavel", "пароль123", "380982367350", "2", new DateOnly(1980, 3, 10),
+                    new List<Card>()
+                    {
+                        new Card("1111", CurrencyType.UAH, 12000.00m),
+                        new Card("1111", CurrencyType.USD, 20.00m)
+                    })
+            });
     }
-
 }

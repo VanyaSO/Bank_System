@@ -8,19 +8,6 @@ namespace Bank_System;
 
 public static class Query
 {
-    static void Deserialize(string path, ref List<Currency> list)
-    {
-        var deserializedObj = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(path));
-
-        string dateLastUpdate = deserializedObj.dateLastUpdate.ToString();
-        string dateToday = DateOnly.FromDateTime(DateTime.Today).ToString("dd.MM.yyyy");
-        if (dateLastUpdate.CompareTo(dateToday) != 0)
-        {
-            throw new Exception("Курсы валют не актальны");
-        }
-
-        list = JsonConvert.DeserializeObject<List<Currency>>(deserializedObj.listCurrency.ToString());
-    }
     public static async void GetСurrencyRates()
     {
         
@@ -33,7 +20,7 @@ public static class Query
             if (!File.Exists(path)) throw new Exception();
             Deserialize(path, ref listCurrency);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // делаем запрос и получаем новые данные
             string url = Common.ApiCurrencyRates;
@@ -69,10 +56,22 @@ public static class Query
             // сохраняем все курсы валют
             foreach (var currency in listCurrency)
             {
-                Common.Bank.Currencies.Add(Common.ParseStringToCurrencyType(currency.Cc), currency.Rate);
-                Console.WriteLine(currency.Cc);
-                Console.WriteLine(currency.Rate);
+                Common.Bank.Currencies.Add(Common.ParseStrToCurrencyType(currency.Cc), currency.Rate);
             }
         }
+    }
+    
+    private static void Deserialize(string path, ref List<Currency> list)
+    {
+        var deserializedObj = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(path));
+
+        string dateLastUpdate = deserializedObj.dateLastUpdate.ToString();
+        string dateToday = DateOnly.FromDateTime(DateTime.Today).ToString("dd.MM.yyyy");
+        if (dateLastUpdate.CompareTo(dateToday) != 0)
+        {
+            throw new Exception("Курсы валют не актальны");
+        }
+
+        list = JsonConvert.DeserializeObject<List<Currency>>(deserializedObj.listCurrency.ToString());
     }
 }

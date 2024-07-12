@@ -13,7 +13,6 @@ namespace Bank_System
         public string Name { get; set; } //не меняется 
         public string Login { get; set; } //не меняется
         public string Password { get; set; }
-
         public Role UserRole { get; private set; }
 
         public MainUser() { }
@@ -63,7 +62,7 @@ namespace Bank_System
                 {
 
                     if(user.Password == pass)
-                        {
+                    {
                           return user;
                     }
                     else

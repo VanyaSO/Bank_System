@@ -2,31 +2,29 @@ namespace Bank_System;
 
 public class Card
 {
-    public string CardNumber { get; private set; }
-    private string _pinCode;
-    public CurrencyType Currency { get; private set; }
+    public string CardNumber { get; }
+    public string PinCode { get; private set; }
+    public CurrencyType Currency { get; }
     public decimal Balance { get; private set; }
     public CardStatus Status {  get; set; }
-    private List<Transaction> _transactions = new List<Transaction>();
+    public List<Transaction> _transactions = new List<Transaction>();
 
     public Card(string pinCode, CurrencyType currency, decimal initialBalance = 0)
     {
         CardNumber = GenerateCardNumber();
-        _pinCode = pinCode;
+        PinCode = pinCode;
         Currency = currency;
         Status = CardStatus.Active;
         Balance = initialBalance;
-        
     }
 
-    public Card(CurrencyType currency, decimal initialBalance = 0)
+    public Card(string cardNumber, string pinCode, CurrencyType currency, decimal balance, CardStatus status)
     {
-        CardNumber = GenerateCardNumber();
-        
+        CardNumber = cardNumber;
+        PinCode = pinCode;
         Currency = currency;
-        Status = CardStatus.Active;
-        Balance = initialBalance;
-
+        Balance = balance;
+        Status = status;
     }
 
 
@@ -45,7 +43,7 @@ public class Card
 
     public bool VerifyPinCode(string pin)
     {
-        return _pinCode == pin;
+        return PinCode == pin;
     }
 
     private bool IsValidePin(string pin)
@@ -57,7 +55,7 @@ public class Card
     {
         if (IsValidePin(pin))
         {
-            _pinCode = pin;
+            PinCode = pin;
         }
         else
         {
@@ -112,10 +110,10 @@ public class Card
 
     public override string ToString()
     {
-        return $"Номер карты: {CardNumber} \nПин-код: {_pinCode} \nВалюта: {Currency} \nБаланс: {Balance} \nСтатус: {Status} \n";
+        return $"Номер карты: {CardNumber} \nПин-код: {PinCode} \nВалюта: {Currency} \nБаланс: {Balance} \nСтатус: {Status} \n";
     }
     
-    public void Transfer(Card recipientCard, decimal amount, string senderInitials, double feesend, double feereceipt, decimal? exchangeRate = null, string recipientName = null)
+    public void Transfer(Card recipientCard, decimal amount, string senderInitials, decimal feesend, decimal feereceipt, decimal? exchangeRate = null, string recipientName = null)
     {
         if (recipientCard == null)
         {

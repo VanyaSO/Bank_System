@@ -15,12 +15,9 @@ namespace Bank_System
 {
     internal class BankUser : MainUser
     {
-
-
-        private readonly DateOnly BDate; // не меняется 
+        public readonly DateOnly BDate; // не меняется 
         public string PhoneNumber { get; set; } // меняетя 
-        private string ID { get; set; } // не меняется 
-
+        public string ID { get; set; } 
         public List<Card> UserCards { get; set; }
 
 
@@ -116,11 +113,7 @@ namespace Bank_System
             }
         }
 
-        private string CreateNewId()
-        {
-            Random rand = new Random();
-            return Convert.ToString(rand.Next(1000,9999));
-        }
+        private string CreateNewId() => Convert.ToString(Common.Random.Next(1000,9999));
 
         //Показать все карты
 
