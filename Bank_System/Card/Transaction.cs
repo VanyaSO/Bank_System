@@ -41,7 +41,11 @@ public class Transaction
         Console.WriteLine($"Номер катры отправителя: {SenderCard.CardNumber}");
         Console.WriteLine($"Инициалы отправителя: {SenderInitials}");
         Console.WriteLine($"Номер карты получателя: {RecipientCard.CardNumber}");
-        Console.WriteLine($"Имя получателя: {RecipientName}");
+
+        if (RecipientName != null)
+        {
+            Console.WriteLine($"Имя получателя: {RecipientName}");
+        }
 
         if (SenderCard.Currency == RecipientCard.Currency)
         {
