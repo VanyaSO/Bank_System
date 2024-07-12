@@ -129,12 +129,12 @@ public static class FileSystem
         bw.Write(transactions.Count);
         foreach (var trans in transactions)
         {
-            bw.Write(trans.TransactionTime.ToString());
-            bw.Write(trans.Amount);
             bw.Write(trans.SenderCard.CardNumber);
             bw.Write(trans.SenderCard.Currency.ToString());
+            bw.Write(trans.Amount);
             bw.Write(trans.RecipientCard.CardNumber);
             bw.Write(trans.RecipientCard.Currency.ToString());
+            bw.Write(trans.TransactionTime.ToString());
             bw.Write(trans.RecipientName);
             if (trans.ExchangeRate.HasValue)
             {
