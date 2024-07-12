@@ -179,51 +179,59 @@ public static class AdminMenu
     
     public static void MenuStatistic()
     {
-        ShowAllUsers();
+        
 
-        Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
-        string findUserData = Console.ReadLine();
-        if (findUserData.Trim().Length == 0)
-            return;
-
-        BankUser user = GetUserByData(findUserData);
+        //BankUser user = GetUserByData(findUserData);
         try
+        {
+            
+            
+            Console.WriteLine("Статистика");
+            Console.WriteLine("1) Заработок на комиссиях по конкретному пользователю");
+            Console.WriteLine("2) Заработок на комиссиях со всех пользователей");
+            Console.WriteLine("0) Выйти");
+
+            int action = MainMenu.GetActionMenu(2);
+            switch (action)
             {
-            if(user!= null)
-            {
-                Console.WriteLine("Статистика");
-                Console.WriteLine("1) Заработок на комиссиях по конкретному пользователю");
-                Console.WriteLine("2) Заработок на комиссиях со всех пользователей");
-                Console.WriteLine("0) Выйти");
+                case 1:
+                    Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
+                    //Todo: Заработок на комиссиях по конкретному пользователю
 
-                int action = MainMenu.GetActionMenu(2);
-                switch (action)
-                {
-                    case 1:
-                        Console.WriteLine("Заработок на комиссиях по конкретному пользователю");
-                        //Todo: Заработок на комиссиях по конкретному пользователю
-                        double resultSum = user.GetSumOfComisionByUser();
-                        Console.WriteLine($"{user.Name}: {resultSum}");
-                        // предлагаем сохранить в текстовый файл
-                        break;
-                    case 2:
-                        Console.WriteLine("Заработок на комиссиях по всем пользователям");
+                    Bank.ShowAllUsers();
 
-
-                        foreach(BankUser users in Common.Bank.Users)
-                        {
-                            user.GetSumOfComisionByUser();
-                        }
-                        // ФИО: 1031.4 UAH
-                        // ФИО: 25.4 UAH
-                        // Сума: 1031.4 + 25.4 UAH
-                        //Todo: Заработок на комиссиях со всех пользователей - потом предлаем сохрнаить в текстовый файл
-                        break;
-                    case 0:
+                    Console.WriteLine("Введите ФИО или ID пользователя, для получаения большей информации о нём. Enter - вернутся назад");
+                    string findUserData = Console.ReadLine();
+                    if (findUserData.Trim().Length == 0)
                         return;
-                }
 
+                    BankUser user = GetUserByData(findUserData);
+
+
+                    double resultSum = user.GetSumOfComisionByUser();
+                    Console.WriteLine($"{user.Name}: {resultSum}");
+                    // предлагаем сохранить в текстовый файл
+                    break;
+                case 2:
+                    Console.WriteLine("Заработок на комиссиях по всем пользователям");
+
+
+                    foreach(MainUser user1 in Common.Bank.Users)
+                    {
+                        if(user1.UserRole == Role.BankUser)
+                        {
+                        (user1 as BankUser).GetSumOfComisionByUser();
+
+                        }
+                    }
+                       
+                    break;
+                case 0:
+                    return;
             }
+            
+
+            
             else
             {
                 throw new Exception("Пользователь не найден");
@@ -240,13 +248,7 @@ public static class AdminMenu
     }
 
     //совет куда вынести методы
-    public static void ShowAllUsers() 
-    {
-        foreach(BankUser user in Common.Bank.Users)
-        {
-            user.ShowUserInfo();
-        }
-    }
+
 
     public static BankUser GetUserByData(string findData)
     {
